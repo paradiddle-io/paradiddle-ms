@@ -29,70 +29,40 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public final class HttpExchangeRequest implements Request {
-    private final Request request;
+    private final HttpExchange exchange;
 
     public HttpExchangeRequest(final HttpExchange exchange) {
-        this.request = exchange.getAttribute(HttpExchangeAttributes.REQUEST) != null
-            ? (Request) exchange.getAttribute(HttpExchangeAttributes.REQUEST)
-            : new Default(exchange);
+        this.exchange = exchange;
     }
 
     @Override
     public RequestMethod method() {
-        return request.method();
+        return RequestMethod.valueOf(this.exchange.getRequestMethod());
     }
 
     @Override
     public String path() {
-        return request.path();
+        return this.exchange.getRequestURI().getPath();
     }
 
     @Override
     public List<Header> headers() {
-        return request.headers();
+        return Collections.unmodifiableList(
+            this.exchange.getRequestHeaders()
+                .entrySet()
+                .stream()
+                .map(
+                    entry -> new Header.Generic(
+                        entry.getKey(),
+                        String.join(",", entry.getValue())
+                    )
+                )
+                .collect(Collectors.toList())
+        );
     }
 
     @Override
     public InputStream body() {
-        return request.body();
-    }
-
-    private static final class Default implements Request {
-        private final HttpExchange exchange;
-
-        private Default(final HttpExchange exchange) {
-            this.exchange = exchange;
-        }
-
-        @Override
-        public RequestMethod method() {
-            return RequestMethod.valueOf(this.exchange.getRequestMethod());
-        }
-
-        @Override
-        public String path() {
-            return this.exchange.getRequestURI().getPath();
-        }
-
-        @Override
-        public List<Header> headers() {
-            return Collections.unmodifiableList(
-                this.exchange.getRequestHeaders()
-                    .entrySet()
-                    .stream()
-                    .map(
-                        entry -> new Header.Generic(
-                            entry.getKey(),
-                            String.join(",", entry.getValue())
-                        )
-                    )
-                    .collect(Collectors.toList())
-            );
-        }
-
-        @Override
-        public InputStream body() {
-            return this.exchange.getRequestBody();
-        }
+        return this.exchange.getRequestBody();
     }
 }

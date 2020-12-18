@@ -22,7 +22,7 @@ package io.paradiddle.ms;
 import java.util.function.Function;
 
 public interface Endpoint {
-    Response execute(Request request);
+    Response process(Request request);
 
     static interface Builder {
         Endpoint build();

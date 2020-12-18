@@ -43,8 +43,12 @@ public final class HttpServerMicroservice implements Microservice {
 
     @Override
     public void start() throws IOException {
-        final int port = server instanceof HttpsServer ? 443 : 80;
-        this.start(new InetSocketAddress("localhost", port));
+        this.start(
+            new InetSocketAddress(
+                "localhost",
+                this.server instanceof HttpsServer ? 443 : 80
+            )
+        );
     }
 
     @Override

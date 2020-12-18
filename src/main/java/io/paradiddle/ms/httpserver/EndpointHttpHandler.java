@@ -41,13 +41,13 @@ public final class EndpointHttpHandler implements HttpHandler {
 
     @Override
     public void handle(final HttpExchange exchange) throws IOException {
+        final var client = new HttpExchangeClient(exchange);
         Response response;
         try {
-            response = this.rule.evaluate(this.endpoint.execute(new HttpExchangeRequest(exchange)));
+            response = this.rule.evaluate(this.endpoint.process(client.request()));
         } catch (final RuleViolation violation) {
             response = violation.response();
         }
-        new HttpExchangeResponseConsumer(exchange)
-            .consume(response);
+        client.respond(response);
     }
 }

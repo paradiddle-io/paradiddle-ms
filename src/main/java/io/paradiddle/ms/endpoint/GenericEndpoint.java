@@ -46,7 +46,7 @@ public final class GenericEndpoint implements Endpoint {
     }
 
     @Override
-    public Response execute(final Request request) {
+    public Response process(final Request request) {
         return this.actions.getOrDefault(request.method(), this.defaultAction).apply(request);
     }
 
