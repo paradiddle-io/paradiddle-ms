@@ -21,6 +21,7 @@ package io.paradiddle.ms.httpserver;
 
 import com.sun.net.httpserver.Filter;
 import com.sun.net.httpserver.HttpExchange;
+import io.paradiddle.ms.Client;
 import io.paradiddle.ms.Request;
 import io.paradiddle.ms.Rule;
 import io.paradiddle.ms.RuleViolation;
@@ -38,15 +39,15 @@ public final class RequestRuleFilter extends Filter {
         final HttpExchange exchange,
         final Chain chain
     ) throws IOException {
+        final Client client = new HttpExchangeClient(exchange);
         try {
             exchange.setAttribute(
                 HttpExchangeAttributes.REQUEST,
-                this.rule.evaluate(new HttpExchangeClient(exchange).request())
+                this.rule.evaluate(client.request())
             );
             chain.doFilter(exchange);
         } catch (final RuleViolation exception) {
-            // TODO: Figure out how to handle rule violations.
-            chain.doFilter(exchange);
+            client.respond(exception.response());
         }
     }
 
