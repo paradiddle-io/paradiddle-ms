@@ -1,5 +1,6 @@
 plugins {
     id 'groovy'
+    id 'jacoco'
     id 'org.unbroken-dome.test-sets' version '3.0.1'
 }
 
@@ -17,4 +18,73 @@ dependencies {
     testImplementation 'junit:junit:4.13'
 
     integrationTestImplementation 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
+}
+
+jacocoTestCoverageVerification {
+    dependsOn test, integrationTest
+    executionData(
+        files(
+            [
+                "$buildDir/jacoco/test.exec",
+                "$buildDir/jacoco/integrationTest.exec"
+            ]
+        )
+    )
+    violationRules {
+        rule {
+            element = 'BUNDLE'
+
+            limit {
+                counter = 'CLASS'
+                value = 'COVEREDRATIO'
+                minimum = 1.000
+            }
+        }
+
+        rule {
+            element = 'CLASS'
+
+            limit {
+                counter = 'METHOD'
+                value = 'COVEREDRATIO'
+                minimum = 1.000
+            }
+        }
+
+        rule {
+            element = 'METHOD'
+
+            limit {
+                counter = 'INSTRUCTION'
+                value = 'COVEREDRATIO'
+                minimum = 1.000
+            }
+
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 1.000
+            }
+
+            limit {
+                counter = 'COMPLEXITY'
+                value = 'COVEREDRATIO'
+                minimum = 1.000
+            }
+        }
+    }
+}
+
+task codeCoverageReport(type: JacocoReport, group: 'reporting') {
+    dependsOn test, integrationTest
+
+    executionData tasks.withType(Test)
+    sourceDirectories.from = files(sourceSets.main.allSource.srcDirs)
+    classDirectories.from = files(sourceSets.main.output)
+
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.enabled true
+    }
 }
