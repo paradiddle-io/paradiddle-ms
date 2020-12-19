@@ -19,7 +19,7 @@
 
 package io.paradiddle.ms.action;
 
-import io.paradiddle.ms.header.Headers;
+import io.paradiddle.ms.header.HeaderNames;
 import io.paradiddle.ms.response.GenericResponse;
 import io.paradiddle.ms.Request;
 import io.paradiddle.ms.Response;
@@ -33,11 +33,11 @@ public final class TraceAction implements Function<Request, Response> {
             200,
             request.headers()
                 .stream()
-                .filter(header -> !header.name().equalsIgnoreCase(Headers.CONTENT_LENGTH))
+                .filter(header -> !header.name().equalsIgnoreCase(HeaderNames.CONTENT_LENGTH))
                 .collect(Collectors.toList()),
             request.headers()
                 .stream()
-                .filter(header -> header.name().equalsIgnoreCase(Headers.CONTENT_LENGTH))
+                .filter(header -> header.name().equalsIgnoreCase(HeaderNames.CONTENT_LENGTH))
                 .map(header -> Integer.valueOf(header.value()))
                 .findFirst()
                 .orElse(0),

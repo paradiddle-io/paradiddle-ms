@@ -19,6 +19,7 @@
 
 package io.paradiddle.ms.header;
 
-public final class Headers {
+public final class HeaderNames {
+    public static final String ALLOW = "Allow";
     public static final String CONTENT_LENGTH = "Content-Length";
 }
