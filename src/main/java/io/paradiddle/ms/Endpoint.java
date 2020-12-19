@@ -21,10 +21,11 @@ package io.paradiddle.ms;
 
 import java.util.function.Function;
 
+@FunctionalInterface
 public interface Endpoint {
     Response process(Request request);
 
-    static interface Builder {
+    interface Builder {
         Endpoint build();
 
         Endpoint build(Function<Request, Response> defaultAction);

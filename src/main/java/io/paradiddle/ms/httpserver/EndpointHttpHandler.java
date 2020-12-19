@@ -25,11 +25,16 @@ import io.paradiddle.ms.Response;
 import io.paradiddle.ms.Rule;
 import io.paradiddle.ms.RuleViolation;
 import io.paradiddle.ms.Endpoint;
+import io.paradiddle.ms.rule.NoOpRule;
 import java.io.IOException;
 
 public final class EndpointHttpHandler implements HttpHandler {
     private final Endpoint endpoint;
     private final Rule<Response> rule;
+
+    public EndpointHttpHandler(final Endpoint endpoint) {
+        this(endpoint, new NoOpRule<>());
+    }
 
     public EndpointHttpHandler(
         final Endpoint endpoint,

@@ -17,11 +17,14 @@
  * Boston, MA 02111-1307 USA
  */
 
-package io.paradiddle.ms;
+package io.paradiddle.ms.rule;
 
-import java.io.IOException;
+import io.paradiddle.ms.Rule;
+import io.paradiddle.ms.RuleViolation;
 
-public interface Client {
-    Request request();
-    void respond(Response response) throws IOException;
+public class NoOpRule<T> implements Rule<T> {
+    @Override
+    public T evaluate(final T request) throws RuleViolation {
+        return request;
+    }
 }

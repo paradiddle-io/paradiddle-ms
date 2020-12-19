@@ -17,11 +17,22 @@
  * Boston, MA 02111-1307 USA
  */
 
-package io.paradiddle.ms;
+package io.paradiddle.ms.rule
 
-import java.io.IOException;
+import spock.lang.Specification
 
-public interface Client {
-    Request request();
-    void respond(Response response) throws IOException;
+class CompositeRuleSpec extends Specification {
+    def 'an empty iterable does nothing'() {
+        given: 'a CompositeRule with an empty iterable of Rules'
+        def rule = new CompositeRule(List.of())
+
+        and: 'a test object'
+        def test = 'test'
+
+        when: 'the rule is evaluated on an object'
+        def result = rule.evaluate(test)
+
+        then: 'the resulting object has not changed'
+        result.is(test)
+    }
 }

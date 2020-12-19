@@ -27,23 +27,26 @@ import io.paradiddle.ms.RuleViolation;
 import java.io.IOException;
 
 public final class RequestRuleFilter extends Filter {
-    private final Rule<Request> rules;
+    private final Rule<Request> rule;
 
-    public RequestRuleFilter(final Rule<Request> rules) {
-        this.rules = rules;
+    public RequestRuleFilter(final Rule<Request> rule) {
+        this.rule = rule;
     }
 
     @Override
     public void doFilter(
-        final HttpExchange exchange, final Chain chain
+        final HttpExchange exchange,
+        final Chain chain
     ) throws IOException {
         try {
             exchange.setAttribute(
                 HttpExchangeAttributes.REQUEST,
-                this.rules.evaluate(new HttpExchangeRequest(exchange))
+                this.rule.evaluate(new HttpExchangeClient(exchange).request())
             );
+            chain.doFilter(exchange);
         } catch (final RuleViolation exception) {
             // TODO: Figure out how to handle rule violations.
+            chain.doFilter(exchange);
         }
     }
 
