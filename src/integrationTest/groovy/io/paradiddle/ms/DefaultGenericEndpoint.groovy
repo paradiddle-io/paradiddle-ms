@@ -46,6 +46,19 @@ class DefaultGenericEndpoint extends Specification {
         this.microservice.stop()
     }
 
+    def 'DELETE replies with 405'() {
+        when: 'a plain DELETE is sent'
+        def response
+        try {
+            this.client.delete(path: '/') as HttpResponseDecorator
+        } catch (HttpResponseException exception) {
+            response = exception.response
+        }
+
+        then: 'the response status to be 405'
+        response?.status == 405
+    }
+
     def 'GET replies with 204'() {
         when: 'a plain GET is sent'
         def response = this.client.get(path: '/') as HttpResponseDecorator
@@ -70,6 +83,28 @@ class DefaultGenericEndpoint extends Specification {
 
     }
 
+    def 'OPTIONS replies with GET, HEAD, OPTIONS, TRACE by default'() {
+        when: 'a plain GET is sent'
+        def response = this.client.options(path: '/') as HttpResponseDecorator
+
+        then: 'the response status is 204'
+        response.status == 204
+        response.headers['Allow'].value == 'GET, HEAD, OPTIONS, TRACE'
+    }
+
+    def 'PATCH replies with 405'() {
+        when: 'a plain PATCH is sent'
+        def response
+        try {
+            this.client.patch(path: '/') as HttpResponseDecorator
+        } catch (HttpResponseException exception) {
+            response = exception.response
+        }
+
+        then: 'the response status to be 405'
+        response?.status == 405
+    }
+
     def 'POST replies with 405'() {
         when: 'a plain POST is sent'
         def response
@@ -88,32 +123,6 @@ class DefaultGenericEndpoint extends Specification {
         def response
         try {
             this.client.put(path: '/') as HttpResponseDecorator
-        } catch (HttpResponseException exception) {
-            response = exception.response
-        }
-
-        then: 'the response status to be 405'
-        response?.status == 405
-    }
-
-    def 'DELETE replies with 405'() {
-        when: 'a plain DELETE is sent'
-        def response
-        try {
-            this.client.delete(path: '/') as HttpResponseDecorator
-        } catch (HttpResponseException exception) {
-            response = exception.response
-        }
-
-        then: 'the response status to be 405'
-        response?.status == 405
-    }
-
-    def 'PATCH replies with 405'() {
-        when: 'a plain PATCH is sent'
-        def response
-        try {
-            this.client.patch(path: '/') as HttpResponseDecorator
         } catch (HttpResponseException exception) {
             response = exception.response
         }

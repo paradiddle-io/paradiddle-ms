@@ -46,7 +46,7 @@ public final class OptionsResponse implements Response {
 
     @Override
     public int contentLength() {
-        return 0;
+        return -1;
     }
 
     @Override

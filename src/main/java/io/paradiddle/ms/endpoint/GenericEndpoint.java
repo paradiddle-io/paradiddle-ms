@@ -29,8 +29,9 @@ import io.paradiddle.ms.action.TraceAction;
 import io.paradiddle.ms.Endpoint;
 import io.paradiddle.ms.response.MethodNotAllowedResponse;
 import io.paradiddle.ms.response.NoContentResponse;
-import java.util.LinkedHashMap;
+import java.util.Comparator;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Function;
 
 public final class GenericEndpoint implements Endpoint {
@@ -54,7 +55,7 @@ public final class GenericEndpoint implements Endpoint {
         private final Map<RequestMethod, Function<Request, Response>> actions;
 
         public Builder() {
-            this.actions = new LinkedHashMap<>();
+            this.actions = new TreeMap<>(Comparator.comparing(Enum::name));
         }
 
         Endpoint.Builder addGetAction(final Function<Request, Response> action) {

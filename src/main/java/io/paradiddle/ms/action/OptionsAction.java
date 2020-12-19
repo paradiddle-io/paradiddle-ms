@@ -36,6 +36,6 @@ public final class OptionsAction implements Function<Request, Response> {
 
     @Override
     public Response apply(final Request request) {
-        return new OptionsResponse(Set.copyOf(this.allowed.get()));
+        return new OptionsResponse(this.allowed.get());
     }
 }
