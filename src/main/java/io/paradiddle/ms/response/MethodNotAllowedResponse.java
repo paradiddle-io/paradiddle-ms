@@ -19,7 +19,7 @@
 
 package io.paradiddle.ms.response;
 
-import io.paradiddle.ms.Header;
+import io.paradiddle.ms.HeaderStore;
 import io.paradiddle.ms.header.AllowHeader;
 import io.paradiddle.ms.RequestMethod;
 import io.paradiddle.ms.Response;
@@ -41,7 +41,7 @@ public final class MethodNotAllowedResponse implements Response {
     }
 
     @Override
-    public List<Header> headers() {
+    public HeaderStore headers() {
         return List.of(new AllowHeader(this.allowed.get()));
     }
 

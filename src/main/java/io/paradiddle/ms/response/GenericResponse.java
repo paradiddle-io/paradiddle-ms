@@ -20,19 +20,20 @@
 package io.paradiddle.ms.response;
 
 import io.paradiddle.ms.Header;
+import io.paradiddle.ms.HeaderStore;
 import io.paradiddle.ms.Response;
 import java.io.InputStream;
 import java.util.List;
 
 public final class GenericResponse implements Response {
     private final int _statusCode;
-    private final List<Header> _headers;
+    private final HeaderStore _headers;
     private final int _contentLength;
     private final InputStream _body;
 
     public GenericResponse(
         final int statusCode,
-        final List<Header> headers,
+        final HeaderStore headers,
         final int contentLength,
         final InputStream body
     ) {
@@ -48,7 +49,7 @@ public final class GenericResponse implements Response {
     }
 
     @Override
-    public List<Header> headers() {
+    public HeaderStore headers() {
         return this._headers;
     }
 

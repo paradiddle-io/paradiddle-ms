@@ -22,26 +22,23 @@ import com.sun.net.httpserver.Headers;
 import io.paradiddle.ms.Header;
 import io.paradiddle.ms.HeaderStore;
 import io.paradiddle.ms.header.HeaderName;
+import io.paradiddle.ms.util.DelegatedMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class HeadersBackedHeaderStore implements HeaderStore {
-    private final Headers headers;
-
+public class HeadersBackedHeaderStore extends DelegatedMap<String, List<String>> implements HeaderStore {
     public HeadersBackedHeaderStore(final Headers headers) {
-        this.headers = headers;
+        super(headers);
     }
 
     @Override
     public Optional<Header> fetch(final String name) {
         final Optional<Header> header;
-        if (this.headers.containsKey(name)) {
+        if (this.containsKey(name)) {
             header = Optional.of(
-                new Header.Generic(
-                    name,
-                    this.valueOf(name).orElseThrow()
-                )
+                this.convert(name, this.get(name))
             );
         } else {
             header = Optional.empty();
@@ -56,15 +53,7 @@ public class HeadersBackedHeaderStore implements HeaderStore {
 
     @Override
     public Optional<String> valueOf(final String name) {
-        final Optional<String> value;
-        if (this.headers.containsKey(name)) {
-            value = Optional.of(
-                String.join(", ", this.headers.get(name))
-            );
-        } else {
-            value = Optional.empty();
-        }
-        return value;
+        return this.fetch(name).map(Header::value);
     }
 
     @Override
@@ -75,7 +64,7 @@ public class HeadersBackedHeaderStore implements HeaderStore {
     @Override
     public HeaderStore minus(final String name) {
         final Headers backing = new Headers();
-        this.headers.entrySet()
+        this.entrySet()
             .stream()
             .filter(entry -> entry.getKey().equalsIgnoreCase(name))
             .forEachOrdered(entry -> backing.put(entry.getKey(), entry.getValue()));
@@ -88,16 +77,18 @@ public class HeadersBackedHeaderStore implements HeaderStore {
     }
 
     @Override
-    public List<Header> asList() {
-        return this.headers
-            .entrySet()
+    public Iterator<Header> iterator() {
+        return this.entrySet()
             .stream()
-            .map(
-                entry -> new Header.Generic(
-                    entry.getKey(),
-                    String.join(", ", entry.getValue())
-                )
-            )
-            .collect(Collectors.toUnmodifiableList());
+            .map(entry -> this.convert(entry.getKey(), entry.getValue()))
+            .collect(Collectors.toUnmodifiableList())
+            .iterator();
+    }
+
+    private Header convert(final String name, List<String> values) {
+        return new Header.Generic(
+            name,
+            String.join(", ", values)
+        );
     }
 }

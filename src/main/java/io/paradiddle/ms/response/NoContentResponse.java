@@ -19,11 +19,10 @@
 
 package io.paradiddle.ms.response;
 
-import io.paradiddle.ms.Header;
+import io.paradiddle.ms.HeaderStore;
 import io.paradiddle.ms.Response;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 public final class NoContentResponse implements Response {
     @Override
@@ -32,7 +31,7 @@ public final class NoContentResponse implements Response {
     }
 
     @Override
-    public List<Header> headers() {
+    public HeaderStore headers() {
         return new ArrayList<>(0);
     }
 

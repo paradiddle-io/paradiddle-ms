@@ -21,7 +21,6 @@ package io.paradiddle.ms.httpserver;
 
 import com.sun.net.httpserver.HttpExchange;
 import io.paradiddle.ms.Client;
-import io.paradiddle.ms.Header;
 import io.paradiddle.ms.Request;
 import io.paradiddle.ms.Response;
 import java.io.IOException;
@@ -43,9 +42,7 @@ class HttpExchangeClient implements Client {
 
     @Override
     public void respond(final Response response) throws IOException {
-        for (final Header header : response.headers()) {
-            this.exchange.getResponseHeaders().add(header.name(), header.value());
-        }
+        this.exchange.getResponseHeaders().putAll(response.headers());
         this.exchange.sendResponseHeaders(response.statusCode(), response.contentLength());
         if (response.contentLength() > -1) {
             try (OutputStream body = this.exchange.getResponseBody()) {

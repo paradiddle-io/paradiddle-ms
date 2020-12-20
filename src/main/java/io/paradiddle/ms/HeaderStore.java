@@ -20,14 +20,14 @@ package io.paradiddle.ms;
 
 import io.paradiddle.ms.header.HeaderName;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-public interface HeaderStore {
+public interface HeaderStore extends Iterable<Header>, Map<String, List<String>> {
     Optional<Header> fetch(String name);
     Optional<Header> fetch(HeaderName name);
     Optional<String> valueOf(String name);
     Optional<String> valueOf(HeaderName name);
     HeaderStore minus(String name);
     HeaderStore minus(HeaderName name);
-    List<Header> asList();
 }

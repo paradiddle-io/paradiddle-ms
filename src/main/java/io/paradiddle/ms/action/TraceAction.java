@@ -32,8 +32,7 @@ public final class TraceAction implements Function<Request, Response> {
             200,
             request
                 .headers()
-                .minus(HeaderName.CONTENT_LENGTH)
-                .asList(),
+                .minus(HeaderName.CONTENT_LENGTH),
             Integer.parseInt(
                 request
                     .headers()

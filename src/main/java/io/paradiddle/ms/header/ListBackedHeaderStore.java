@@ -20,14 +20,25 @@ package io.paradiddle.ms.header;
 
 import io.paradiddle.ms.Header;
 import io.paradiddle.ms.HeaderStore;
+import io.paradiddle.ms.util.DelegatedMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ListBackedHeaderStore implements HeaderStore {
+public class ListBackedHeaderStore extends DelegatedMap<String, List<String>> implements HeaderStore {
     private final List<Header> headers;
 
     public ListBackedHeaderStore(final List<Header> headers) {
+        super(
+            headers.stream()
+                .collect(
+                    Collectors.toUnmodifiableMap(
+                        Header::name,
+                        header -> List.of(header.value().split(", "))
+                    )
+                )
+        );
         this.headers = headers;
     }
 
@@ -79,7 +90,7 @@ public class ListBackedHeaderStore implements HeaderStore {
     }
 
     @Override
-    public List<Header> asList() {
-        return List.copyOf(this.headers);
+    public Iterator<Header> iterator() {
+        return this.headers.iterator();
     }
 }

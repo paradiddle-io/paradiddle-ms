@@ -20,13 +20,10 @@
 package io.paradiddle.ms.httpserver;
 
 import com.sun.net.httpserver.HttpExchange;
-import io.paradiddle.ms.Header;
 import io.paradiddle.ms.HeaderStore;
 import io.paradiddle.ms.Request;
 import io.paradiddle.ms.RequestMethod;
-import io.paradiddle.ms.header.ListBackedHeaderStore;
 import java.io.InputStream;
-import java.util.stream.Collectors;
 
 public final class HttpExchangeRequest implements Request {
     private final HttpExchange exchange;
@@ -47,18 +44,7 @@ public final class HttpExchangeRequest implements Request {
 
     @Override
     public HeaderStore headers() {
-        return new ListBackedHeaderStore(
-            this.exchange.getRequestHeaders()
-                .entrySet()
-                .stream()
-                .map(
-                    entry -> new Header.Generic(
-                        entry.getKey(),
-                        String.join(",", entry.getValue())
-                    )
-                )
-                .collect(Collectors.toUnmodifiableList())
-        );
+        return new HeadersBackedHeaderStore(this.exchange.getRequestHeaders());
     }
 
     @Override

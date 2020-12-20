@@ -20,11 +20,10 @@
 package io.paradiddle.ms;
 
 import java.io.InputStream;
-import java.util.List;
 
 public interface Response {
     int statusCode();
-    List<Header> headers();
+    HeaderStore headers();
     int contentLength();
     InputStream body();
 }
