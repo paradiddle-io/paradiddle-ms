@@ -20,14 +20,13 @@
 package io.paradiddle.ms;
 
 import java.io.InputStream;
-import java.util.List;
 
 public interface Request {
     RequestMethod method();
 
     String path();
 
-    List<Header> headers();
+    HeaderStore headers();
 
     InputStream body();
 }

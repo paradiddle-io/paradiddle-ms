@@ -20,27 +20,27 @@
 package io.paradiddle.ms.header;
 
 import io.paradiddle.ms.Header;
-import io.paradiddle.ms.RequestMethod;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-public final class AllowHeader implements Header {
-    private final Set<RequestMethod> allowed;
+public enum HeaderName {
+    ALLOW("Allow"),
+    CONTENT_LENGTH("Content-Length");
 
-    public AllowHeader(final Set<RequestMethod> allowed) {
-        this.allowed = allowed;
+    private final String value;
+
+    HeaderName(final String value) {
+        this.value = value;
     }
 
     @Override
-    public String name() {
-        return HeaderName.ALLOW.toString();
+    public String toString() {
+        return this.value;
     }
 
-    @Override
-    public String value() {
-        return this.allowed
-            .stream()
-            .map(Enum::name)
-            .collect(Collectors.joining(", "));
+    public boolean matches(final Header header) {
+        return header.name().equalsIgnoreCase(this.value);
+    }
+
+    public boolean doesNotMatch(final Header header) {
+        return !this.matches(header);
     }
 }

@@ -21,11 +21,11 @@ package io.paradiddle.ms.httpserver;
 
 import com.sun.net.httpserver.HttpExchange;
 import io.paradiddle.ms.Header;
+import io.paradiddle.ms.HeaderStore;
 import io.paradiddle.ms.Request;
 import io.paradiddle.ms.RequestMethod;
+import io.paradiddle.ms.header.ListBackedHeaderStore;
 import java.io.InputStream;
-import java.util.Collections;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public final class HttpExchangeRequest implements Request {
@@ -46,8 +46,8 @@ public final class HttpExchangeRequest implements Request {
     }
 
     @Override
-    public List<Header> headers() {
-        return Collections.unmodifiableList(
+    public HeaderStore headers() {
+        return new ListBackedHeaderStore(
             this.exchange.getRequestHeaders()
                 .entrySet()
                 .stream()
@@ -57,7 +57,7 @@ public final class HttpExchangeRequest implements Request {
                         String.join(",", entry.getValue())
                     )
                 )
-                .collect(Collectors.toList())
+                .collect(Collectors.toUnmodifiableList())
         );
     }
 

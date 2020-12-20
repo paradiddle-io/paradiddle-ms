@@ -64,7 +64,7 @@ class GenericEndpointSpec extends Specification {
         }
 
         @Override
-        List<Header> headers() {
+        HeaderStore headers() {
             return new ArrayList<Header>(0)
         }
 

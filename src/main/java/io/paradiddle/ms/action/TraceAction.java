@@ -19,28 +19,27 @@
 
 package io.paradiddle.ms.action;
 
-import io.paradiddle.ms.header.HeaderNames;
+import io.paradiddle.ms.header.HeaderName;
 import io.paradiddle.ms.response.GenericResponse;
 import io.paradiddle.ms.Request;
 import io.paradiddle.ms.Response;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public final class TraceAction implements Function<Request, Response> {
     @Override
     public Response apply(final Request request) {
         return new GenericResponse(
             200,
-            request.headers()
-                .stream()
-                .filter(header -> !header.name().equalsIgnoreCase(HeaderNames.CONTENT_LENGTH))
-                .collect(Collectors.toList()),
-            request.headers()
-                .stream()
-                .filter(header -> header.name().equalsIgnoreCase(HeaderNames.CONTENT_LENGTH))
-                .map(header -> Integer.valueOf(header.value()))
-                .findFirst()
-                .orElse(0),
+            request
+                .headers()
+                .minus(HeaderName.CONTENT_LENGTH)
+                .asList(),
+            Integer.parseInt(
+                request
+                    .headers()
+                    .valueOf(HeaderName.CONTENT_LENGTH)
+                    .orElse("-1")
+            ),
             request.body()
         );
     }

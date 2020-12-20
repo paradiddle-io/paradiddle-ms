@@ -23,7 +23,7 @@ import groovyx.net.http.HttpResponseDecorator
 import groovyx.net.http.HttpResponseException
 import groovyx.net.http.RESTClient
 import io.paradiddle.ms.endpoint.GenericEndpoint
-import io.paradiddle.ms.header.HeaderNames
+import io.paradiddle.ms.header.HeaderName
 import io.paradiddle.ms.httpserver.HttpServerMicroservice
 import spock.lang.Specification
 
@@ -44,22 +44,6 @@ class DefaultGenericEndpointSpec extends Specification {
 
     def cleanup() {
         this.microservice.stop()
-    }
-
-    def 'DELETE replies with 405 and includes the Allow header'() {
-        when: 'a plain DELETE is sent'
-        def response
-        try {
-            response = this.client.delete(path: '/') as HttpResponseDecorator
-        } catch (HttpResponseException exception) {
-            response = exception.response as HttpResponseDecorator
-        }
-
-        then: 'the response status is 405'
-        response?.status == 405
-
-        and: 'the Allow header contains GET, HEAD, OPTIONS, TRACE'
-        response.headers[HeaderNames.ALLOW].value == 'GET, HEAD, OPTIONS, TRACE'
     }
 
     def 'GET replies with 204'() {
@@ -86,33 +70,6 @@ class DefaultGenericEndpointSpec extends Specification {
 
     }
 
-    def 'OPTIONS replies with GET, HEAD, OPTIONS, TRACE by default'() {
-        when: 'a plain GET is sent'
-        def response = this.client.options(path: '/') as HttpResponseDecorator
-
-        then: 'the response status is 204'
-        response.status == 204
-
-        and: 'the Allow header is valid'
-        response.headers[HeaderNames.ALLOW].value == 'GET, HEAD, OPTIONS, TRACE'
-    }
-
-    def 'PATCH replies with 405 and includes the Allow header'() {
-        when: 'a plain PATCH is sent'
-        def response
-        try {
-            response = this.client.patch(path: '/') as HttpResponseDecorator
-        } catch (HttpResponseException exception) {
-            response = exception.response as HttpResponseDecorator
-        }
-
-        then: 'the response status is 405'
-        response?.status == 405
-
-        and: 'the Allow header contains GET, HEAD, OPTIONS, TRACE'
-        response.headers[HeaderNames.ALLOW].value == 'GET, HEAD, OPTIONS, TRACE'
-    }
-
     def 'POST replies with 405 and includes the Allow header'() {
         when: 'a plain POST is sent'
         def response
@@ -126,7 +83,7 @@ class DefaultGenericEndpointSpec extends Specification {
         response?.status == 405
 
         and: 'the Allow header contains GET, HEAD, OPTIONS, TRACE'
-        response.headers[HeaderNames.ALLOW].value == 'GET, HEAD, OPTIONS, TRACE'
+        response.headers[HeaderName.ALLOW.name()].value == 'GET, HEAD, OPTIONS, TRACE'
     }
 
     def 'PUT replies with 405 and includes the Allow header'() {
@@ -142,6 +99,49 @@ class DefaultGenericEndpointSpec extends Specification {
         response?.status == 405
 
         and: 'the Allow header contains GET, HEAD, OPTIONS, TRACE'
-        response.headers[HeaderNames.ALLOW].value == 'GET, HEAD, OPTIONS, TRACE'
+        response.headers[HeaderName.ALLOW.name()].value == 'GET, HEAD, OPTIONS, TRACE'
+    }
+
+    def 'DELETE replies with 405 and includes the Allow header'() {
+        when: 'a plain DELETE is sent'
+        def response
+        try {
+            response = this.client.delete(path: '/') as HttpResponseDecorator
+        } catch (HttpResponseException exception) {
+            response = exception.response as HttpResponseDecorator
+        }
+
+        then: 'the response status is 405'
+        response?.status == 405
+
+        and: 'the Allow header contains GET, HEAD, OPTIONS, TRACE'
+        response.headers[HeaderName.ALLOW.name()].value == 'GET, HEAD, OPTIONS, TRACE'
+    }
+
+    def 'OPTIONS replies with GET, HEAD, OPTIONS, TRACE by default'() {
+        when: 'a plain GET is sent'
+        def response = this.client.options(path: '/') as HttpResponseDecorator
+
+        then: 'the response status is 204'
+        response.status == 204
+
+        and: 'the Allow header is valid'
+        response.headers[HeaderName.ALLOW.name()].value == 'GET, HEAD, OPTIONS, TRACE'
+    }
+
+    def 'PATCH replies with 405 and includes the Allow header'() {
+        when: 'a plain PATCH is sent'
+        def response
+        try {
+            response = this.client.patch(path: '/') as HttpResponseDecorator
+        } catch (HttpResponseException exception) {
+            response = exception.response as HttpResponseDecorator
+        }
+
+        then: 'the response status is 405'
+        response?.status == 405
+
+        and: 'the Allow header contains GET, HEAD, OPTIONS, TRACE'
+        response.headers[HeaderName.ALLOW.name()].value == 'GET, HEAD, OPTIONS, TRACE'
     }
 }

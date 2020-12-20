@@ -16,10 +16,18 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
+package io.paradiddle.ms;
 
-package io.paradiddle.ms.header;
+import io.paradiddle.ms.header.HeaderName;
+import java.util.List;
+import java.util.Optional;
 
-public final class HeaderNames {
-    public static final String ALLOW = "Allow";
-    public static final String CONTENT_LENGTH = "Content-Length";
+public interface HeaderStore {
+    Optional<Header> fetch(String name);
+    Optional<Header> fetch(HeaderName name);
+    Optional<String> valueOf(String name);
+    Optional<String> valueOf(HeaderName name);
+    HeaderStore minus(String name);
+    HeaderStore minus(HeaderName name);
+    List<Header> asList();
 }
