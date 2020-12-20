@@ -16,38 +16,44 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-package io.paradiddle.ms.header.store;
+
+package io.paradiddle.ms.header;
 
 import io.paradiddle.ms.Header;
-import io.paradiddle.ms.HeaderStore;
-import io.paradiddle.ms.header.HeaderName;
-import java.util.Iterator;
-import java.util.Optional;
+import java.util.Map;
 
-public abstract class DelegatedHeaderStore implements HeaderStore {
-    private final HeaderStore store;
-    
-    protected DelegatedHeaderStore(final HeaderStore store) {
-        this.store = store;
+public enum HeaderNames implements HeaderName {
+    ALLOW("Allow"),
+    CONTENT_LENGTH("Content-Length");
+
+    private final String _value;
+
+    HeaderNames(final String value) {
+        this._value = value;
     }
 
     @Override
-    public Optional<Header> fetch(final HeaderName name) {
-        return this.store.fetch(name);
+    public String value() {
+        return this._value;
     }
 
     @Override
-    public Optional<String> valueOf(final HeaderName name) {
-        return this.store.valueOf(name);
+    public boolean matches(final Header header) {
+        return header.name().equalsIgnoreCase(this._value);
     }
 
     @Override
-    public HeaderStore minus(final HeaderName name) {
-        return this.store.minus(name);
+    public boolean matches(final Map.Entry<String, String> header) {
+        return header.getKey().equalsIgnoreCase(this._value);
     }
 
     @Override
-    public Iterator<Header> iterator() {
-        return this.store.iterator();
+    public boolean doesNotMatch(final Header header) {
+        return !this.matches(header);
+    }
+
+    @Override
+    public boolean doesNotMatch(final Map.Entry<String, String> header) {
+        return !this.matches(header);
     }
 }

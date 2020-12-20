@@ -34,7 +34,7 @@ public final class AllowHeader implements Header {
 
     @Override
     public String name() {
-        return HeaderName.ALLOW.name();
+        return HeaderNames.ALLOW.name();
     }
 
     @Override

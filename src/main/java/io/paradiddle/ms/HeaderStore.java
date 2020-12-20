@@ -24,37 +24,19 @@ import java.util.Iterator;
 import java.util.Optional;
 
 public interface HeaderStore extends Iterable<Header> {
-    Optional<Header> fetch(String name);
     Optional<Header> fetch(HeaderName name);
-    Optional<String> valueOf(String name);
     Optional<String> valueOf(HeaderName name);
-    HeaderStore minus(String name);
     HeaderStore minus(HeaderName name);
 
     final class Empty implements HeaderStore {
-        @Override
-        public Optional<Header> fetch(final String name) {
-            return Optional.empty();
-        }
-
         @Override
         public Optional<Header> fetch(final HeaderName name) {
             return Optional.empty();
         }
 
         @Override
-        public Optional<String> valueOf(final String name) {
-            return Optional.empty();
-        }
-
-        @Override
         public Optional<String> valueOf(final HeaderName name) {
             return Optional.empty();
-        }
-
-        @Override
-        public HeaderStore minus(final String name) {
-            return this;
         }
 
         @Override

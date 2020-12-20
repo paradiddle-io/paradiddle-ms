@@ -20,26 +20,16 @@
 package io.paradiddle.ms.header;
 
 import io.paradiddle.ms.Header;
+import java.util.Map;
 
-public enum HeaderName {
-    ALLOW("Allow"),
-    CONTENT_LENGTH("Content-Length");
+public interface HeaderName {
+    String value();
 
-    private final String _value;
+    boolean matches(Header header);
 
-    HeaderName(final String value) {
-        this._value = value;
-    }
+    boolean matches(Map.Entry<String, String> header);
 
-    public String value() {
-        return this._value;
-    }
+    boolean doesNotMatch(Header header);
 
-    public boolean matches(final Header header) {
-        return header.name().equalsIgnoreCase(this._value);
-    }
-
-    public boolean doesNotMatch(final Header header) {
-        return !this.matches(header);
-    }
+    boolean doesNotMatch(Map.Entry<String, String> header);
 }

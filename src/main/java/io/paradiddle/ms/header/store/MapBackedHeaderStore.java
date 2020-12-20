@@ -35,11 +35,11 @@ public final class MapBackedHeaderStore implements HeaderStore {
     }
 
     @Override
-    public Optional<Header> fetch(final String name) {
+    public Optional<Header> fetch(final HeaderName name) {
         final Optional<Header> header;
-        if (this.headers.containsKey(name)) {
+        if (this.headers.containsKey(name.value())) {
             header = Optional.of(
-                new Header.Generic(name, this.headers.get(name))
+                new Header.Generic(name.value(), this.headers.get(name.value()))
             );
         } else {
             header = Optional.empty();
@@ -48,33 +48,18 @@ public final class MapBackedHeaderStore implements HeaderStore {
     }
 
     @Override
-    public Optional<Header> fetch(final HeaderName name) {
-        return this.fetch(name.value());
-    }
-
-    @Override
-    public Optional<String> valueOf(final String name) {
+    public Optional<String> valueOf(final HeaderName name) {
         return this.fetch(name).map(Header::value);
     }
 
     @Override
-    public Optional<String> valueOf(final HeaderName name) {
-        return this.valueOf(name.value());
-    }
-
-    @Override
-    public HeaderStore minus(final String name) {
+    public HeaderStore minus(final HeaderName name) {
         final Map<String, String> backing = new LinkedHashMap<>();
         this.headers.entrySet()
             .stream()
-            .filter(entry -> entry.getKey().equalsIgnoreCase(name))
+            .filter(name::doesNotMatch)
             .forEachOrdered(entry -> backing.put(entry.getKey(), entry.getValue()));
         return new MapBackedHeaderStore(backing);
-    }
-
-    @Override
-    public HeaderStore minus(final HeaderName name) {
-        return this.minus(name.value());
     }
 
     @Override

@@ -34,39 +34,24 @@ public final class SetBackedHeaderStore implements HeaderStore {
     }
 
     @Override
-    public Optional<Header> fetch(final String name) {
+    public Optional<Header> fetch(final HeaderName name) {
         return this.headers.stream()
-            .filter(header -> header.name().equalsIgnoreCase(name))
+            .filter(name::matches)
             .findFirst();
     }
 
     @Override
-    public Optional<Header> fetch(final HeaderName name) {
-        return this.fetch(name.value());
-    }
-
-    @Override
-    public Optional<String> valueOf(final String name) {
+    public Optional<String> valueOf(final HeaderName name) {
         return this.fetch(name).map(Header::value);
     }
 
     @Override
-    public Optional<String> valueOf(final HeaderName name) {
-        return this.valueOf(name.value());
-    }
-
-    @Override
-    public HeaderStore minus(final String name) {
+    public HeaderStore minus(final HeaderName name) {
         return new SetBackedHeaderStore(
             this.headers.stream()
-                .filter(header -> !header.name().equalsIgnoreCase(name))
+                .filter(name::doesNotMatch)
                 .collect(Collectors.toUnmodifiableSet())
         );
-    }
-
-    @Override
-    public HeaderStore minus(final HeaderName name) {
-        return this.minus(name.value());
     }
 
     @Override

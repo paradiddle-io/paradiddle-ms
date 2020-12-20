@@ -19,7 +19,7 @@
 
 package io.paradiddle.ms.action;
 
-import io.paradiddle.ms.header.HeaderName;
+import io.paradiddle.ms.header.HeaderNames;
 import io.paradiddle.ms.response.GenericResponse;
 import io.paradiddle.ms.Request;
 import io.paradiddle.ms.Response;
@@ -32,11 +32,11 @@ public final class TraceAction implements Function<Request, Response> {
             200,
             request
                 .headers()
-                .minus(HeaderName.CONTENT_LENGTH),
+                .minus(HeaderNames.CONTENT_LENGTH),
             Integer.parseInt(
                 request
                     .headers()
-                    .valueOf(HeaderName.CONTENT_LENGTH)
+                    .valueOf(HeaderNames.CONTENT_LENGTH)
                     .orElse("-1")
             ),
             request.body()
