@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class MapBackedHeaderStore implements HeaderStore {
+public final class MapBackedHeaderStore implements HeaderStore {
     private final Map<String, String> headers;
 
     public MapBackedHeaderStore(final Map<String, String> headers) {

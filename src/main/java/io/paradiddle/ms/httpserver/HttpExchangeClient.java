@@ -26,7 +26,7 @@ import io.paradiddle.ms.Response;
 import java.io.IOException;
 import java.io.OutputStream;
 
-class HttpExchangeClient implements Client {
+final class HttpExchangeClient implements Client {
     private final HttpExchange exchange;
 
     public HttpExchangeClient(final HttpExchange exchange) {

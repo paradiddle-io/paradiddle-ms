@@ -19,6 +19,7 @@
 
 package io.paradiddle.ms;
 
+@FunctionalInterface
 public interface Rule<T> {
     T evaluate(T request) throws RuleViolation;
 }

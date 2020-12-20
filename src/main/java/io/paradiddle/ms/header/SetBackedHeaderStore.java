@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class SetBackedHeaderStore implements HeaderStore {
+public final class SetBackedHeaderStore implements HeaderStore {
     private final Set<Header> headers;
 
     public SetBackedHeaderStore(final Set<Header> headers) {
