@@ -24,6 +24,7 @@ import io.paradiddle.ms.header.HeaderName;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 public final class SetBackedHeaderStore implements HeaderStore {
@@ -52,6 +53,11 @@ public final class SetBackedHeaderStore implements HeaderStore {
                 .filter(name::doesNotMatch)
                 .collect(Collectors.toUnmodifiableSet())
         );
+    }
+
+    @Override
+    public void writeAll(final BiConsumer<String, String> target) {
+        this.headers.forEach(header -> target.accept(header.name(), header.value()));
     }
 
     @Override

@@ -23,6 +23,7 @@ import io.paradiddle.ms.HeaderStore;
 import io.paradiddle.ms.header.HeaderName;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 public abstract class DelegatedHeaderStore implements HeaderStore {
     private final HeaderStore store;
@@ -44,6 +45,11 @@ public abstract class DelegatedHeaderStore implements HeaderStore {
     @Override
     public HeaderStore minus(final HeaderName name) {
         return this.store.minus(name);
+    }
+
+    @Override
+    public void writeAll(final BiConsumer<String, String> target) {
+        this.store.writeAll(target);
     }
 
     @Override

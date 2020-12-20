@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 public final class MapBackedHeaderStore implements HeaderStore {
@@ -60,6 +61,11 @@ public final class MapBackedHeaderStore implements HeaderStore {
             .filter(name::doesNotMatch)
             .forEachOrdered(entry -> backing.put(entry.getKey(), entry.getValue()));
         return new MapBackedHeaderStore(backing);
+    }
+
+    @Override
+    public void writeAll(final BiConsumer<String, String> target) {
+        this.headers.forEach(target);
     }
 
     @Override
