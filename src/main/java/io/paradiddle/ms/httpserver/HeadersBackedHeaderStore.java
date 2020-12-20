@@ -20,8 +20,8 @@
 package io.paradiddle.ms.httpserver;
 
 import com.sun.net.httpserver.Headers;
-import io.paradiddle.ms.header.MapBackedHeaderStore;
-import io.paradiddle.ms.header.DelegatedHeaderStore;
+import io.paradiddle.ms.header.store.MapBackedHeaderStore;
+import io.paradiddle.ms.header.store.DelegatedHeaderStore;
 import java.util.Map;
 import java.util.stream.Collectors;
 

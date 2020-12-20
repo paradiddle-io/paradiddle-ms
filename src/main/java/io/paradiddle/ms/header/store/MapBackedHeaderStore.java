@@ -16,52 +16,73 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-package io.paradiddle.ms.header;
+package io.paradiddle.ms.header.store;
 
 import io.paradiddle.ms.Header;
 import io.paradiddle.ms.HeaderStore;
+import io.paradiddle.ms.header.HeaderName;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-public abstract class DelegatedHeaderStore implements HeaderStore {
-    private final HeaderStore store;
-    
-    protected DelegatedHeaderStore(final HeaderStore store) {
-        this.store = store;
+public final class MapBackedHeaderStore implements HeaderStore {
+    private final Map<String, String> headers;
+
+    public MapBackedHeaderStore(final Map<String, String> headers) {
+        this.headers = headers;
     }
 
     @Override
     public Optional<Header> fetch(final String name) {
-        return this.store.fetch(name);
+        final Optional<Header> header;
+        if (this.headers.containsKey(name)) {
+            header = Optional.of(
+                new Header.Generic(name, this.headers.get(name))
+            );
+        } else {
+            header = Optional.empty();
+        }
+        return header;
     }
 
     @Override
     public Optional<Header> fetch(final HeaderName name) {
-        return this.store.fetch(name);
+        return this.fetch(name.value());
     }
 
     @Override
     public Optional<String> valueOf(final String name) {
-        return this.store.valueOf(name);
+        return this.fetch(name).map(Header::value);
     }
 
     @Override
     public Optional<String> valueOf(final HeaderName name) {
-        return this.store.valueOf(name);
+        return this.valueOf(name.value());
     }
 
     @Override
     public HeaderStore minus(final String name) {
-        return this.store.minus(name);
+        final Map<String, String> backing = new LinkedHashMap<>();
+        this.headers.entrySet()
+            .stream()
+            .filter(entry -> entry.getKey().equalsIgnoreCase(name))
+            .forEachOrdered(entry -> backing.put(entry.getKey(), entry.getValue()));
+        return new MapBackedHeaderStore(backing);
     }
 
     @Override
     public HeaderStore minus(final HeaderName name) {
-        return this.store.minus(name);
+        return this.minus(name.value());
     }
 
     @Override
     public Iterator<Header> iterator() {
-        return this.store.iterator();
+        return this.headers.entrySet()
+            .stream()
+            .map(entry -> (Header) new Header.Generic(entry))
+            .collect(Collectors.toUnmodifiableSet())
+            .iterator();
     }
 }

@@ -23,7 +23,7 @@ import io.paradiddle.ms.HeaderStore;
 import io.paradiddle.ms.header.AllowHeader;
 import io.paradiddle.ms.RequestMethod;
 import io.paradiddle.ms.Response;
-import io.paradiddle.ms.header.SetBackedHeaderStore;
+import io.paradiddle.ms.header.store.SetBackedHeaderStore;
 import java.io.InputStream;
 import java.util.Set;
 import java.util.function.Supplier;

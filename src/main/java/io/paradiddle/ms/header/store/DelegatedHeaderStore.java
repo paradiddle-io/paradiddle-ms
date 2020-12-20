@@ -16,60 +16,53 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-package io.paradiddle.ms.header;
+package io.paradiddle.ms.header.store;
 
 import io.paradiddle.ms.Header;
 import io.paradiddle.ms.HeaderStore;
+import io.paradiddle.ms.header.HeaderName;
 import java.util.Iterator;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-public final class SetBackedHeaderStore implements HeaderStore {
-    private final Set<Header> headers;
-
-    public SetBackedHeaderStore(final Set<Header> headers) {
-        this.headers = headers;
+public abstract class DelegatedHeaderStore implements HeaderStore {
+    private final HeaderStore store;
+    
+    protected DelegatedHeaderStore(final HeaderStore store) {
+        this.store = store;
     }
 
     @Override
     public Optional<Header> fetch(final String name) {
-        return this.headers.stream()
-            .filter(header -> header.name().equalsIgnoreCase(name))
-            .findFirst();
+        return this.store.fetch(name);
     }
 
     @Override
     public Optional<Header> fetch(final HeaderName name) {
-        return this.fetch(name.value());
+        return this.store.fetch(name);
     }
 
     @Override
     public Optional<String> valueOf(final String name) {
-        return this.fetch(name).map(Header::value);
+        return this.store.valueOf(name);
     }
 
     @Override
     public Optional<String> valueOf(final HeaderName name) {
-        return this.valueOf(name.value());
+        return this.store.valueOf(name);
     }
 
     @Override
     public HeaderStore minus(final String name) {
-        return new SetBackedHeaderStore(
-            this.headers.stream()
-                .filter(header -> !header.name().equalsIgnoreCase(name))
-                .collect(Collectors.toUnmodifiableSet())
-        );
+        return this.store.minus(name);
     }
 
     @Override
     public HeaderStore minus(final HeaderName name) {
-        return this.minus(name.value());
+        return this.store.minus(name);
     }
 
     @Override
     public Iterator<Header> iterator() {
-        return this.headers.iterator();
+        return this.store.iterator();
     }
 }

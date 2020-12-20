@@ -16,34 +16,28 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-package io.paradiddle.ms.header;
+package io.paradiddle.ms.header.store;
 
 import io.paradiddle.ms.Header;
 import io.paradiddle.ms.HeaderStore;
+import io.paradiddle.ms.header.HeaderName;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-public final class MapBackedHeaderStore implements HeaderStore {
-    private final Map<String, String> headers;
+public final class SetBackedHeaderStore implements HeaderStore {
+    private final Set<Header> headers;
 
-    public MapBackedHeaderStore(final Map<String, String> headers) {
+    public SetBackedHeaderStore(final Set<Header> headers) {
         this.headers = headers;
     }
 
     @Override
     public Optional<Header> fetch(final String name) {
-        final Optional<Header> header;
-        if (this.headers.containsKey(name)) {
-            header = Optional.of(
-                new Header.Generic(name, this.headers.get(name))
-            );
-        } else {
-            header = Optional.empty();
-        }
-        return header;
+        return this.headers.stream()
+            .filter(header -> header.name().equalsIgnoreCase(name))
+            .findFirst();
     }
 
     @Override
@@ -63,12 +57,11 @@ public final class MapBackedHeaderStore implements HeaderStore {
 
     @Override
     public HeaderStore minus(final String name) {
-        final Map<String, String> backing = new LinkedHashMap<>();
-        this.headers.entrySet()
-            .stream()
-            .filter(entry -> entry.getKey().equalsIgnoreCase(name))
-            .forEachOrdered(entry -> backing.put(entry.getKey(), entry.getValue()));
-        return new MapBackedHeaderStore(backing);
+        return new SetBackedHeaderStore(
+            this.headers.stream()
+                .filter(header -> !header.name().equalsIgnoreCase(name))
+                .collect(Collectors.toUnmodifiableSet())
+        );
     }
 
     @Override
@@ -78,10 +71,6 @@ public final class MapBackedHeaderStore implements HeaderStore {
 
     @Override
     public Iterator<Header> iterator() {
-        return this.headers.entrySet()
-            .stream()
-            .map(entry -> (Header) new Header.Generic(entry))
-            .collect(Collectors.toUnmodifiableSet())
-            .iterator();
+        return this.headers.iterator();
     }
 }
