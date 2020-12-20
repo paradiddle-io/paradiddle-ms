@@ -22,7 +22,6 @@ package io.paradiddle.ms.response;
 import io.paradiddle.ms.HeaderStore;
 import io.paradiddle.ms.Response;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 public final class NoContentResponse implements Response {
     @Override
@@ -32,7 +31,7 @@ public final class NoContentResponse implements Response {
 
     @Override
     public HeaderStore headers() {
-        return new ArrayList<>(0);
+        return new HeaderStore.Empty();
     }
 
     @Override

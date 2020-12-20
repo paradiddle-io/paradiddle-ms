@@ -23,8 +23,8 @@ import io.paradiddle.ms.HeaderStore;
 import io.paradiddle.ms.header.AllowHeader;
 import io.paradiddle.ms.RequestMethod;
 import io.paradiddle.ms.Response;
+import io.paradiddle.ms.header.SetBackedHeaderStore;
 import java.io.InputStream;
-import java.util.List;
 import java.util.Set;
 
 public final class OptionsResponse implements Response {
@@ -41,7 +41,9 @@ public final class OptionsResponse implements Response {
 
     @Override
     public HeaderStore headers() {
-        return List.of(new AllowHeader(this.allowed));
+        return new SetBackedHeaderStore(
+            Set.of(new AllowHeader(this.allowed))
+        );
     }
 
     @Override

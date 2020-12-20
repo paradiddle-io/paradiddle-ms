@@ -20,48 +20,28 @@ package io.paradiddle.ms.header;
 
 import io.paradiddle.ms.Header;
 import io.paradiddle.ms.HeaderStore;
-import io.paradiddle.ms.util.DelegatedMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ListBackedHeaderStore extends DelegatedMap<String, List<String>> implements HeaderStore {
-    private final List<Header> headers;
+public class SetBackedHeaderStore implements HeaderStore {
+    private final Set<Header> headers;
 
-    public ListBackedHeaderStore(final List<Header> headers) {
-        super(
-            headers.stream()
-                .collect(
-                    Collectors.toUnmodifiableMap(
-                        Header::name,
-                        header -> List.of(header.value().split(", "))
-                    )
-                )
-        );
+    public SetBackedHeaderStore(final Set<Header> headers) {
         this.headers = headers;
     }
 
     @Override
     public Optional<Header> fetch(final String name) {
-        return this.headers
-            .stream()
+        return this.headers.stream()
             .filter(header -> header.name().equalsIgnoreCase(name))
-            .reduce(
-                (header1, header2) -> new Header.Generic(
-                    name,
-                    String.join(
-                        ", ",
-                        header1.value(),
-                        header2.value()
-                    )
-                )
-            );
+            .findFirst();
     }
 
     @Override
     public Optional<Header> fetch(final HeaderName name) {
-        return this.fetch(name.name());
+        return this.fetch(name.value());
     }
 
     @Override
@@ -71,22 +51,21 @@ public class ListBackedHeaderStore extends DelegatedMap<String, List<String>> im
 
     @Override
     public Optional<String> valueOf(final HeaderName name) {
-        return this.valueOf(name.name());
+        return this.valueOf(name.value());
     }
 
     @Override
     public HeaderStore minus(final String name) {
-        return new ListBackedHeaderStore(
-            this.headers
-                .stream()
+        return new SetBackedHeaderStore(
+            this.headers.stream()
                 .filter(header -> !header.name().equalsIgnoreCase(name))
-                .collect(Collectors.toUnmodifiableList())
+                .collect(Collectors.toUnmodifiableSet())
         );
     }
 
     @Override
     public HeaderStore minus(final HeaderName name) {
-        return this.minus(name.name());
+        return this.minus(name.value());
     }
 
     @Override

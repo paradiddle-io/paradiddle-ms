@@ -19,13 +19,22 @@
 
 package io.paradiddle.ms;
 
+import java.util.List;
+import java.util.Map;
+
 public interface Header {
     String name();
     String value();
+    List<String> values();
 
     final class Generic implements Header {
         private final String name;
         private final String value;
+
+        public Generic(final Map.Entry<String, String> entry) {
+            this.name = entry.getKey();
+            this.value = entry.getValue();
+        }
 
         public Generic(final String name, final String value) {
             this.name = name;
@@ -40,6 +49,11 @@ public interface Header {
         @Override
         public String value() {
             return this.value;
+        }
+
+        @Override
+        public List<String> values() {
+            return List.of(this.value.split(", "));
         }
     }
 }

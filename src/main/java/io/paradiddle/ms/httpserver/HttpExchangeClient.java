@@ -42,7 +42,9 @@ class HttpExchangeClient implements Client {
 
     @Override
     public void respond(final Response response) throws IOException {
-        this.exchange.getResponseHeaders().putAll(response.headers());
+        for (final var header : response.headers()) {
+            this.exchange.getResponseHeaders().add(header.name(), header.value());
+        }
         this.exchange.sendResponseHeaders(response.statusCode(), response.contentLength());
         if (response.contentLength() > -1) {
             try (OutputStream body = this.exchange.getResponseBody()) {

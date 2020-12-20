@@ -25,19 +25,18 @@ public enum HeaderName {
     ALLOW("Allow"),
     CONTENT_LENGTH("Content-Length");
 
-    private final String value;
+    private final String _value;
 
     HeaderName(final String value) {
-        this.value = value;
+        this._value = value;
     }
 
-    @Override
-    public String toString() {
-        return this.value;
+    public String value() {
+        return this._value;
     }
 
     public boolean matches(final Header header) {
-        return header.name().equalsIgnoreCase(this.value);
+        return header.name().equalsIgnoreCase(this._value);
     }
 
     public boolean doesNotMatch(final Header header) {

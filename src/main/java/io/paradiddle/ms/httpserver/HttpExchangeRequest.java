@@ -23,6 +23,7 @@ import com.sun.net.httpserver.HttpExchange;
 import io.paradiddle.ms.HeaderStore;
 import io.paradiddle.ms.Request;
 import io.paradiddle.ms.RequestMethod;
+import io.paradiddle.ms.header.MapBackedHeaderStore;
 import java.io.InputStream;
 
 public final class HttpExchangeRequest implements Request {
