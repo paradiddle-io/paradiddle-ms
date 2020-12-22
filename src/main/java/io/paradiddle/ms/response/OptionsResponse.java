@@ -20,7 +20,7 @@
 package io.paradiddle.ms.response;
 
 import io.paradiddle.ms.HeaderStore;
-import io.paradiddle.ms.header.AllowHeader;
+import io.paradiddle.ms.header.general.AllowHeader;
 import io.paradiddle.ms.RequestMethod;
 import io.paradiddle.ms.Response;
 import io.paradiddle.ms.header.store.SetBackedHeaderStore;

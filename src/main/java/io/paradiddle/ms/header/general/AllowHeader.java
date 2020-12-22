@@ -17,43 +17,40 @@
  * Boston, MA 02111-1307 USA
  */
 
-package io.paradiddle.ms.response;
+package io.paradiddle.ms.header.general;
 
-import io.paradiddle.ms.HeaderStore;
-import io.paradiddle.ms.header.general.AllowHeader;
+import io.paradiddle.ms.Header;
 import io.paradiddle.ms.RequestMethod;
-import io.paradiddle.ms.Response;
-import io.paradiddle.ms.header.store.SetBackedHeaderStore;
-import java.io.InputStream;
+import io.paradiddle.ms.header.GeneralHeaders;
+import java.util.List;
 import java.util.Set;
-import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
-public final class MethodNotAllowedResponse implements Response {
-    private final Supplier<Set<RequestMethod>> allowed;
+public final class AllowHeader implements Header {
+    private final Set<RequestMethod> allowed;
 
-    public MethodNotAllowedResponse(final Supplier<Set<RequestMethod>> allowed) {
+    public AllowHeader(final Set<RequestMethod> allowed) {
         this.allowed = allowed;
     }
 
     @Override
-    public int statusCode() {
-        return 405;
+    public String name() {
+        return GeneralHeaders.ALLOW.name();
     }
 
     @Override
-    public HeaderStore headers() {
-        return new SetBackedHeaderStore(
-            Set.of(new AllowHeader(this.allowed.get()))
-        );
+    public String value() {
+        return this.allowed
+            .stream()
+            .map(Enum::name)
+            .collect(Collectors.joining(", "));
     }
 
     @Override
-    public int contentLength() {
-        return 0;
-    }
-
-    @Override
-    public InputStream body() {
-        return InputStream.nullInputStream();
+    public List<String> values() {
+        return this.allowed
+            .stream()
+            .map(Enum::name)
+            .collect(Collectors.toUnmodifiableList());
     }
 }

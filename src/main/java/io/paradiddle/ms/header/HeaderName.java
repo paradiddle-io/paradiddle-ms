@@ -24,12 +24,41 @@ import java.util.Map;
 
 public interface HeaderName {
     String value();
-
     boolean matches(Header header);
-
     boolean matches(Map.Entry<String, String> header);
-
     boolean doesNotMatch(Header header);
-
     boolean doesNotMatch(Map.Entry<String, String> header);
+
+    class Basic implements HeaderName {
+        private final String _value;
+
+        public Basic(final String value) {
+            this._value = value;
+        }
+
+        @Override
+        public String value() {
+            return this._value;
+        }
+
+        @Override
+        public boolean matches(final Header header) {
+            return header.name().equalsIgnoreCase(this._value);
+        }
+
+        @Override
+        public boolean matches(final Map.Entry<String, String> header) {
+            return header.getKey().equalsIgnoreCase(this._value);
+        }
+
+        @Override
+        public boolean doesNotMatch(final Header header) {
+            return !this.matches(header);
+        }
+
+        @Override
+        public boolean doesNotMatch(final Map.Entry<String, String> header) {
+            return !this.matches(header);
+        }
+    }
 }

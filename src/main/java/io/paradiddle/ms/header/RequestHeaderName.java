@@ -16,30 +16,7 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
+package io.paradiddle.ms.header;
 
-package io.paradiddle.ms.action;
-
-import io.paradiddle.ms.header.EntityHeaders;
-import io.paradiddle.ms.response.GenericResponse;
-import io.paradiddle.ms.Request;
-import io.paradiddle.ms.Response;
-import java.util.function.Function;
-
-public final class TraceAction implements Function<Request, Response> {
-    @Override
-    public Response apply(final Request request) {
-        return new GenericResponse(
-            200,
-            request
-                .headers()
-                .minus(EntityHeaders.CONTENT_LENGTH),
-            Integer.parseInt(
-                request
-                    .headers()
-                    .valueOf(EntityHeaders.CONTENT_LENGTH)
-                    .orElse("-1")
-            ),
-            request.body()
-        );
-    }
+public interface RequestHeaderName extends HeaderName {
 }

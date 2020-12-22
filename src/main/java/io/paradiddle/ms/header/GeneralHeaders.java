@@ -22,38 +22,45 @@ package io.paradiddle.ms.header;
 import io.paradiddle.ms.Header;
 import java.util.Map;
 
-public enum HeaderNames implements HeaderName {
+public enum GeneralHeaders implements RequestHeaderName, ResponseHeaderName {
     ALLOW("Allow"),
-    CONTENT_LENGTH("Content-Length");
+    CACHE_CONTROL("Cache-Control"),
+    CONNECTION("Connection"),
+    DATE("Date"),
+    PRAGMA("Pragma"),
+    TRAILER("Trailer"),
+    UPGRADE("Upgrade"),
+    VIA("Via"),
+    WARNING("Warning");
 
-    private final String _value;
+    private final HeaderName name;
 
-    HeaderNames(final String value) {
-        this._value = value;
+    GeneralHeaders(final String value) {
+        this.name = new Basic(value);
     }
 
     @Override
     public String value() {
-        return this._value;
+        return this.name.value();
     }
 
     @Override
     public boolean matches(final Header header) {
-        return header.name().equalsIgnoreCase(this._value);
+        return this.name.matches(header);
     }
 
     @Override
     public boolean matches(final Map.Entry<String, String> header) {
-        return header.getKey().equalsIgnoreCase(this._value);
+        return this.name.matches(header);
     }
 
     @Override
     public boolean doesNotMatch(final Header header) {
-        return !this.matches(header);
+        return this.name.doesNotMatch(header);
     }
 
     @Override
     public boolean doesNotMatch(final Map.Entry<String, String> header) {
-        return !this.matches(header);
+        return this.name.doesNotMatch(header);
     }
 }
