@@ -55,6 +55,10 @@ public enum RequestHeaders implements RequestHeaderName {
         this.name = new Basic(value);
     }
 
+    public static HeaderNameCollection all() {
+        return new HeaderNameSet(RequestHeaders.values());
+    }
+
     @Override
     public String value() {
         return this.name.value();

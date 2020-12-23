@@ -35,6 +35,10 @@ public enum EntityHeaders implements HeaderName {
         this.name = new Basic(value);
     }
 
+    public static HeaderNameCollection all() {
+        return new HeaderNameSet(EntityHeaders.values());
+    }
+
     @Override
     public String value() {
         return this.name.value();

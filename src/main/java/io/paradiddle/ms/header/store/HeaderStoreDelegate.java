@@ -21,20 +21,26 @@ package io.paradiddle.ms.header.store;
 import io.paradiddle.ms.Header;
 import io.paradiddle.ms.HeaderStore;
 import io.paradiddle.ms.header.HeaderName;
+import io.paradiddle.ms.header.HeaderNameCollection;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-public abstract class DelegatedHeaderStore implements HeaderStore {
+public abstract class HeaderStoreDelegate implements HeaderStore {
     private final HeaderStore store;
     
-    protected DelegatedHeaderStore(final HeaderStore store) {
+    protected HeaderStoreDelegate(final HeaderStore store) {
         this.store = store;
     }
 
     @Override
     public Optional<Header> fetch(final HeaderName name) {
         return this.store.fetch(name);
+    }
+
+    @Override
+    public HeaderStore fetch(final HeaderNameCollection names) {
+        return this.store.fetch(names);
     }
 
     @Override
@@ -48,8 +54,13 @@ public abstract class DelegatedHeaderStore implements HeaderStore {
     }
 
     @Override
-    public void writeAll(final BiConsumer<String, String> target) {
-        this.store.writeAll(target);
+    public HeaderStore minus(final HeaderNameCollection names) {
+        return this.store.minus(names);
+    }
+
+    @Override
+    public void consumeAll(final BiConsumer<String, String> target) {
+        this.store.consumeAll(target);
     }
 
     @Override

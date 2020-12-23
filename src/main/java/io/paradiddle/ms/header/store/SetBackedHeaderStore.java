@@ -21,6 +21,7 @@ package io.paradiddle.ms.header.store;
 import io.paradiddle.ms.Header;
 import io.paradiddle.ms.HeaderStore;
 import io.paradiddle.ms.header.HeaderName;
+import io.paradiddle.ms.header.HeaderNameCollection;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
@@ -42,6 +43,15 @@ public final class SetBackedHeaderStore implements HeaderStore {
     }
 
     @Override
+    public HeaderStore fetch(final HeaderNameCollection names) {
+        return new SetBackedHeaderStore(
+            this.headers.stream()
+                .filter(names::containsMatch)
+                .collect(Collectors.toUnmodifiableSet())
+        );
+    }
+
+    @Override
     public Optional<String> valueOf(final HeaderName name) {
         return this.fetch(name).map(Header::value);
     }
@@ -56,7 +66,16 @@ public final class SetBackedHeaderStore implements HeaderStore {
     }
 
     @Override
-    public void writeAll(final BiConsumer<String, String> target) {
+    public HeaderStore minus(final HeaderNameCollection names) {
+        return new SetBackedHeaderStore(
+            this.headers.stream()
+                .filter(names::doesNotContainMatch)
+                .collect(Collectors.toUnmodifiableSet())
+        );
+    }
+
+    @Override
+    public void consumeAll(final BiConsumer<String, String> target) {
         this.headers.forEach(header -> target.accept(header.name(), header.value()));
     }
 

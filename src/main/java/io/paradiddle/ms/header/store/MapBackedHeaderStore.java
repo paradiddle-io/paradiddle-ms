@@ -21,6 +21,7 @@ package io.paradiddle.ms.header.store;
 import io.paradiddle.ms.Header;
 import io.paradiddle.ms.HeaderStore;
 import io.paradiddle.ms.header.HeaderName;
+import io.paradiddle.ms.header.HeaderNameCollection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -49,6 +50,16 @@ public final class MapBackedHeaderStore implements HeaderStore {
     }
 
     @Override
+    public HeaderStore fetch(final HeaderNameCollection names) {
+        return new MapBackedHeaderStore(
+            this.headers.entrySet()
+                .stream()
+                .filter(names::containsMatch)
+                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue))
+        );
+    }
+
+    @Override
     public Optional<String> valueOf(final HeaderName name) {
         return this.fetch(name).map(Header::value);
     }
@@ -64,7 +75,17 @@ public final class MapBackedHeaderStore implements HeaderStore {
     }
 
     @Override
-    public void writeAll(final BiConsumer<String, String> target) {
+    public HeaderStore minus(final HeaderNameCollection names) {
+        return new MapBackedHeaderStore(
+            this.headers.entrySet()
+                .stream()
+                .filter(names::doesNotContainMatch)
+                .collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, Map.Entry::getValue))
+        );
+    }
+
+    @Override
+    public void consumeAll(final BiConsumer<String, String> target) {
         this.headers.forEach(target);
     }
 

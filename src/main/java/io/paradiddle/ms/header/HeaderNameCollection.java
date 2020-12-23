@@ -16,28 +16,15 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
+package io.paradiddle.ms.header;
 
-package io.paradiddle.ms.httpserver;
-
-import com.sun.net.httpserver.Headers;
-import io.paradiddle.ms.header.store.MapBackedHeaderStore;
-import io.paradiddle.ms.header.store.HeaderStoreDelegate;
+import io.paradiddle.ms.Header;
+import java.util.Collection;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-public final class HeadersBackedHeaderStore extends HeaderStoreDelegate {
-    public HeadersBackedHeaderStore(final Headers store) {
-        super(
-            new MapBackedHeaderStore(
-                store.entrySet()
-                    .stream()
-                    .collect(
-                        Collectors.toUnmodifiableMap(
-                            Map.Entry::getKey,
-                            entry -> String.join(", ", entry.getValue())
-                        )
-                    )
-            )
-        );
-    }
+public interface HeaderNameCollection extends Collection<HeaderName> {
+    boolean containsMatch(Header header);
+    boolean containsMatch(Map.Entry<String, String> header);
+    boolean doesNotContainMatch(Header header);
+    boolean doesNotContainMatch(Map.Entry<String, String> header);
 }

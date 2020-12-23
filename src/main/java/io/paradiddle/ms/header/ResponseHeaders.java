@@ -57,6 +57,10 @@ public enum ResponseHeaders implements ResponseHeaderName {
         this.name = new Basic(value);
     }
 
+    public static HeaderNameCollection all() {
+        return new HeaderNameSet(ResponseHeaders.values());
+    }
+
     @Override
     public String value() {
         return name.value();

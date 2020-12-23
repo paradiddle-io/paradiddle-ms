@@ -42,7 +42,7 @@ final class HttpExchangeClient implements Client {
 
     @Override
     public void respond(final Response response) throws IOException {
-        response.headers().writeAll(this.exchange.getResponseHeaders()::add);
+        response.headers().consumeAll(this.exchange.getResponseHeaders()::add);
         this.exchange.sendResponseHeaders(response.statusCode(), response.contentLength());
         if (response.contentLength() > -1) {
             try (OutputStream body = this.exchange.getResponseBody()) {

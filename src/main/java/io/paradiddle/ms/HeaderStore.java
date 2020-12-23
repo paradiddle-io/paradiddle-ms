@@ -19,6 +19,7 @@
 package io.paradiddle.ms;
 
 import io.paradiddle.ms.header.HeaderName;
+import io.paradiddle.ms.header.HeaderNameCollection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Optional;
@@ -26,14 +27,21 @@ import java.util.function.BiConsumer;
 
 public interface HeaderStore extends Iterable<Header> {
     Optional<Header> fetch(HeaderName name);
+    HeaderStore fetch(HeaderNameCollection names);
     Optional<String> valueOf(HeaderName name);
     HeaderStore minus(HeaderName name);
-    void writeAll(BiConsumer<String, String> target);
+    HeaderStore minus(HeaderNameCollection names);
+    void consumeAll(BiConsumer<String, String> target);
 
     final class Empty implements HeaderStore {
         @Override
         public Optional<Header> fetch(final HeaderName name) {
             return Optional.empty();
+        }
+
+        @Override
+        public HeaderStore fetch(final HeaderNameCollection names) {
+            return this;
         }
 
         @Override
@@ -47,7 +55,12 @@ public interface HeaderStore extends Iterable<Header> {
         }
 
         @Override
-        public void writeAll(final BiConsumer<String, String> target) {
+        public HeaderStore minus(final HeaderNameCollection names) {
+            return this;
+        }
+
+        @Override
+        public void consumeAll(final BiConsumer<String, String> target) {
             // intentionally empty
         }
 
