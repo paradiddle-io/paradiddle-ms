@@ -25,7 +25,6 @@ import java.util.Map;
 public interface Header {
     String name();
     String value();
-    List<String> values();
 
     final class Generic implements Header {
         private final String name;
@@ -49,11 +48,6 @@ public interface Header {
         @Override
         public String value() {
             return this.value;
-        }
-
-        @Override
-        public List<String> values() {
-            return List.of(this.value.split(", "));
         }
     }
 }

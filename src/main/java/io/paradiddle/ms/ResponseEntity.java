@@ -20,7 +20,9 @@ package io.paradiddle.ms;
 
 import io.paradiddle.ms.entity.EntityConsumer;
 import java.io.IOException;
+import java.util.function.BiConsumer;
 
 public interface ResponseEntity extends Entity {
+    void consumeHeaders(BiConsumer<String, String> consumer);
     void consume(EntityConsumer consumer) throws IOException;
 }

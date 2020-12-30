@@ -20,4 +20,5 @@ package io.paradiddle.ms;
 
 public interface MimeType {
     boolean matches(String value);
+    String asString();
 }

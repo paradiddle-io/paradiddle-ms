@@ -22,8 +22,10 @@ import io.paradiddle.ms.HeaderStore;
 import io.paradiddle.ms.MimeType;
 import io.paradiddle.ms.RequestEntity;
 import io.paradiddle.ms.ResponseEntity;
+import io.paradiddle.ms.StandardMimeTypes;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.function.BiConsumer;
 
 public final class EmptyEntity implements RequestEntity, ResponseEntity {
     private final InputStream stream;
@@ -41,12 +43,17 @@ public final class EmptyEntity implements RequestEntity, ResponseEntity {
 
     @Override
     public MimeType type() {
-        return string -> false;
+        return StandardMimeTypes.NONE;
     }
 
     @Override
     public <T> T interpreted(final EntityInterpreter<T> interpreter) throws IOException {
         return interpreter.interpret(this.stream, this.headers);
+    }
+
+    @Override
+    public void consumeHeaders(final BiConsumer<String, String> consumer) {
+        this.headers.consumeAll(consumer);
     }
 
     @Override

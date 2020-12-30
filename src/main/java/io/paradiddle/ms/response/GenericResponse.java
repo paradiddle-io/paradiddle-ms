@@ -54,6 +54,7 @@ public final class GenericResponse implements Response {
     @Override
     public void consumeHeaders(final BiConsumer<String, String> target) {
         this.headers.consumeAll(target);
+        this.entity.consumeHeaders(target);
     }
 
     @Override

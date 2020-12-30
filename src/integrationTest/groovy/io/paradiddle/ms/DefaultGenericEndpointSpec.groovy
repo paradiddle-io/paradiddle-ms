@@ -140,15 +140,22 @@ class DefaultGenericEndpointSpec extends Specification {
         then: 'the response status is 200'
         response.getStatusLine().statusCode == 200
 
+        and: 'the MIME type is message/http'
+        response.getEntity().contentType.value == 'message/http'
+
         and: 'the body is identical to the request'
-        new String(
+        def body = new String(
             response.getEntity().content.readAllBytes(),
             Charset.forName("UTF-8")
-        ) == '''|TRACE / HTTP/1.1
-                |Host: localhost:8080
-                |Connection: Keep-Alive
-                |'''
-        .stripMargin()
+        )
+        body == '''|TRACE / HTTP/1.1
+                   |Host: localhost:8080
+                   |Connection: Keep-Alive
+                   |'''.stripMargin() ||
+        body == '''|TRACE / HTTP/1.1
+                   |Connection: Keep-Alive
+                   |Host: localhost:8080
+                   |'''.stripMargin()
     }
 
     def 'PATCH replies with 405 and includes the Allow header'() {

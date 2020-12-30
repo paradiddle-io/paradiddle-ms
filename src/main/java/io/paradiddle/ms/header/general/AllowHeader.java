@@ -45,12 +45,4 @@ public final class AllowHeader implements Header {
             .map(Enum::name)
             .collect(Collectors.joining(", "));
     }
-
-    @Override
-    public List<String> values() {
-        return this.allowed
-            .stream()
-            .map(Enum::name)
-            .collect(Collectors.toUnmodifiableList());
-    }
 }

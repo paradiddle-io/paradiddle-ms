@@ -16,24 +16,26 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
+package io.paradiddle.ms.header.entity;
 
-package io.paradiddle.ms.action;
+import io.paradiddle.ms.Header;
+import io.paradiddle.ms.MimeType;
+import io.paradiddle.ms.header.EntityHeaders;
 
-import io.paradiddle.ms.Action;
-import io.paradiddle.ms.HeaderStore;
-import io.paradiddle.ms.entity.response.TraceEntity;
-import io.paradiddle.ms.response.GenericResponse;
-import io.paradiddle.ms.Request;
-import io.paradiddle.ms.Response;
-import java.io.IOException;
+public final class ContentTypeHeader implements Header {
+    private final MimeType type;
 
-public final class TraceAction implements Action {
+    public ContentTypeHeader(final MimeType type) {
+        this.type = type;
+    }
+
     @Override
-    public Response act(final Request request) throws IOException {
-        return new GenericResponse(
-            200,
-            new HeaderStore.Empty(),
-            new TraceEntity(request)
-        );
+    public String name() {
+        return EntityHeaders.CONTENT_TYPE.value();
+    }
+
+    @Override
+    public String value() {
+        return this.type.asString();
     }
 }

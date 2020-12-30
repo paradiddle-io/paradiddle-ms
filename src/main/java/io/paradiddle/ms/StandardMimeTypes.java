@@ -19,7 +19,8 @@
 package io.paradiddle.ms;
 
 public enum StandardMimeTypes implements MimeType {
-    MESSAGE_HTTP("message/http");
+    MESSAGE_HTTP("message/http"),
+    NONE("");
 
     private final String value;
 
@@ -30,5 +31,10 @@ public enum StandardMimeTypes implements MimeType {
     @Override
     public boolean matches(final String value) {
         return this.value.equals(value);
+    }
+
+    @Override
+    public String asString() {
+        return this.value;
     }
 }
