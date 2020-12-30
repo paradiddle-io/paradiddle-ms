@@ -19,8 +19,14 @@
 
 package io.paradiddle.ms;
 
+import io.paradiddle.ms.response.BadRequestResponse;
+
 public class RuleViolation extends Exception {
     private final Response _response;
+
+    public RuleViolation() {
+        this._response = new BadRequestResponse();
+    }
 
     public RuleViolation(final Response response) {
         this._response = response;

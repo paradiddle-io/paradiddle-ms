@@ -16,15 +16,31 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
+package io.paradiddle.ms.response;
 
-package io.paradiddle.ms.rule;
+import io.paradiddle.ms.Response;
+import io.paradiddle.ms.entity.EntityConsumer;
+import java.io.IOException;
+import java.util.function.BiConsumer;
 
-import io.paradiddle.ms.Rule;
-import io.paradiddle.ms.RuleViolation;
-
-public final class NoOpRule<T> implements Rule<T> {
+public final class BadRequestResponse implements Response {
     @Override
-    public T evaluate(final T request) throws RuleViolation {
-        return request;
+    public int statusCode() {
+        return 400;
+    }
+
+    @Override
+    public long contentLength() {
+        return 0;
+    }
+
+    @Override
+    public void consumeHeaders(final BiConsumer<String, String> target) {
+        // Intentionally empty
+    }
+
+    @Override
+    public void consumeEntity(final EntityConsumer consumer) throws IOException {
+        // Intentionally empty
     }
 }
