@@ -20,6 +20,7 @@
 package io.paradiddle.ms
 
 import io.paradiddle.ms.endpoint.GenericEndpoint
+import io.paradiddle.ms.entity.EmptyEntity
 import io.paradiddle.ms.response.NoContentResponse
 import spock.lang.Specification
 
@@ -65,12 +66,12 @@ class GenericEndpointSpec extends Specification {
 
         @Override
         HeaderStore headers() {
-            return new ArrayList<Header>(0)
+            return new HeaderStore.Empty()
         }
 
         @Override
-        InputStream body() {
-            return InputStream.nullInputStream()
+        RequestEntity entity() {
+            return new EmptyEntity()
         }
     }
 }
