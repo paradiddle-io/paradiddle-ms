@@ -19,6 +19,7 @@
 
 package io.paradiddle.ms.endpoint;
 
+import io.paradiddle.ms.Action;
 import io.paradiddle.ms.Request;
 import io.paradiddle.ms.RequestMethod;
 import io.paradiddle.ms.Response;
@@ -29,60 +30,59 @@ import io.paradiddle.ms.action.TraceAction;
 import io.paradiddle.ms.Endpoint;
 import io.paradiddle.ms.response.MethodNotAllowedResponse;
 import io.paradiddle.ms.response.NoContentResponse;
+import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.function.Function;
 
 public final class GenericEndpoint implements Endpoint {
-    private final Function<Request, Response> defaultAction;
-    private final Map<RequestMethod, Function<Request, Response>> actions;
+    private final Action defaultAction;
+    private final Map<RequestMethod, Action> actions;
 
     private GenericEndpoint(
-        final Function<Request, Response> defaultAction,
-        final Map<RequestMethod, Function<Request, Response>> actions
+        final Action defaultAction,
+        final Map<RequestMethod, Action> actions
     ) {
         this.defaultAction = defaultAction;
         this.actions = actions;
     }
 
     @Override
-    public Response process(final Request request) {
-        return this.actions.getOrDefault(request.method(), this.defaultAction).apply(request);
+    public Response process(final Request request) throws IOException {
+        return this.actions.getOrDefault(request.method(), this.defaultAction).act(request);
     }
 
-    public static final class Builder implements Endpoint.Builder {
-        private final Map<RequestMethod, Function<Request, Response>> actions;
+    public static final class Builder {
+        private final Map<RequestMethod, Action> actions;
 
         public Builder() {
             this.actions = new EnumMap<>(RequestMethod.class);
         }
 
-        Endpoint.Builder addGetAction(final Function<Request, Response> action) {
+        public Builder addGetAction(final Action action) {
             this.actions.put(RequestMethod.GET, action);
             return this;
         }
 
-        Endpoint.Builder addPostAction(final Function<Request, Response> action) {
+        public Builder addPostAction(final Action action) {
             this.actions.put(RequestMethod.POST, action);
             return this;
         }
 
-        Endpoint.Builder addPutAction(final Function<Request, Response> action) {
+        public Builder addPutAction(final Action action) {
             this.actions.put(RequestMethod.PUT, action);
             return this;
         }
 
-        Endpoint.Builder addDeleteAction(final Function<Request, Response> action) {
+        public Builder addDeleteAction(final Action action) {
             this.actions.put(RequestMethod.DELETE, action);
             return this;
         }
 
-        Endpoint.Builder addPatchAction(final Function<Request, Response> action) {
+        public Builder addPatchAction(final Action action) {
             this.actions.put(RequestMethod.PATCH, action);
             return this;
         }
 
-        @Override
         public Endpoint build() {
             return this.build(
                 new CannedResponseAction(
@@ -91,8 +91,7 @@ public final class GenericEndpoint implements Endpoint {
             );
         }
 
-        @Override
-        public Endpoint build(final Function<Request, Response> defaultAction) {
+        public Endpoint build(final Action defaultAction) {
             this.actions.put(
                 RequestMethod.OPTIONS,
                 new OptionsAction(this.actions::keySet)
@@ -101,7 +100,7 @@ public final class GenericEndpoint implements Endpoint {
             if (!this.actions.containsKey(RequestMethod.GET)) {
                 this.actions.put(
                     RequestMethod.GET,
-                    new CannedResponseAction(NoContentResponse::new)
+                    new CannedResponseAction(() -> new NoContentResponse())
                 );
             }
             this.actions.put(

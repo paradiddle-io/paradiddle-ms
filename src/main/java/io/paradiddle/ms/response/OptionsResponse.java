@@ -16,16 +16,16 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-
 package io.paradiddle.ms.response;
 
-import io.paradiddle.ms.HeaderStore;
+import io.paradiddle.ms.Header;
+import io.paradiddle.ms.entity.EntityConsumer;
 import io.paradiddle.ms.header.general.AllowHeader;
 import io.paradiddle.ms.RequestMethod;
 import io.paradiddle.ms.Response;
-import io.paradiddle.ms.header.store.SetBackedHeaderStore;
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.Set;
+import java.util.function.BiConsumer;
 
 public final class OptionsResponse implements Response {
     private final Set<RequestMethod> allowed;
@@ -40,19 +40,18 @@ public final class OptionsResponse implements Response {
     }
 
     @Override
-    public HeaderStore headers() {
-        return new SetBackedHeaderStore(
-            Set.of(new AllowHeader(this.allowed))
-        );
+    public long contentLength() {
+        return 0;
     }
 
     @Override
-    public int contentLength() {
-        return -1;
+    public void consumeHeaders(final BiConsumer<String, String> target) {
+        final Header allowHeader = new AllowHeader(this.allowed);
+        target.accept(allowHeader.name(), allowHeader.value());
     }
 
     @Override
-    public InputStream body() {
-        return InputStream.nullInputStream();
+    public void consumeEntity(final EntityConsumer consumer) throws IOException {
+        // Intentionally blank
     }
 }

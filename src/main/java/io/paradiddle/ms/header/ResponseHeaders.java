@@ -29,6 +29,7 @@ public enum ResponseHeaders implements ResponseHeaderName {
     ACCESS_CONTROL_ALLOW_METHODS("Access-Control-Allow-Methods"),
     ACCESS_CONTROL_ALLOW_HEADERS("Access-Control-Allow-Headers"),
     ACCEPT_PATCH("Accept-Patch"),
+    ACCEPT_POST("Accept-Post"),
     ACCEPT_RANGES("Accept-Ranges"),
     AGE("Age"),
     ALT_SVC("Alt-Svc"),

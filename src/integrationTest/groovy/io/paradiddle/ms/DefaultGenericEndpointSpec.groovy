@@ -16,7 +16,6 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-
 package io.paradiddle.ms
 
 import groovyx.net.http.HttpResponseDecorator
@@ -25,6 +24,8 @@ import groovyx.net.http.RESTClient
 import io.paradiddle.ms.endpoint.GenericEndpoint
 import io.paradiddle.ms.header.GeneralHeaders
 import io.paradiddle.ms.httpserver.HttpServerMicroservice
+import java.nio.charset.Charset
+import org.apache.http.client.methods.HttpTrace
 import spock.lang.Specification
 
 class DefaultGenericEndpointSpec extends Specification {
@@ -127,6 +128,27 @@ class DefaultGenericEndpointSpec extends Specification {
 
         and: 'the Allow header is valid'
         response.headers[GeneralHeaders.ALLOW.name()].value == 'GET, HEAD, OPTIONS, TRACE'
+    }
+
+    def 'TRACE replies with 200 and supplies the request in the body'() {
+        given: 'a plain TRACE request'
+        def request = new HttpTrace('http://localhost:8080/')
+
+        when: 'the request is sent'
+        def response = this.client.client.execute(request)
+
+        then: 'the response status is 200'
+        response.getStatusLine().statusCode == 200
+
+        and: 'the body is identical to the request'
+        new String(
+            response.getEntity().content.readAllBytes(),
+            Charset.forName("UTF-8")
+        ) == '''|TRACE / HTTP/1.1
+                |Host: localhost:8080
+                |Connection: Keep-Alive
+                |'''
+        .stripMargin()
     }
 
     def 'PATCH replies with 405 and includes the Allow header'() {

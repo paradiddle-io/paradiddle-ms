@@ -16,19 +16,19 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-
 package io.paradiddle.ms;
 
-import java.io.IOException;
-import java.util.function.Function;
+public enum StandardMimeTypes implements MimeType {
+    MESSAGE_HTTP("message/http");
 
-@FunctionalInterface
-public interface Endpoint {
-    Response process(Request request) throws IOException;
+    private final String value;
 
-    interface Builder {
-        Endpoint build();
+    StandardMimeTypes(final String value) {
+        this.value = value;
+    }
 
-        Endpoint build(Function<Request, Response> defaultAction);
+    @Override
+    public boolean matches(final String value) {
+        return this.value.equals(value);
     }
 }

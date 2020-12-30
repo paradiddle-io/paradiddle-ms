@@ -16,50 +16,44 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-
-package io.paradiddle.ms.response;
+package io.paradiddle.ms.entity;
 
 import io.paradiddle.ms.HeaderStore;
-import io.paradiddle.ms.Response;
-import io.paradiddle.ms.ResponseEntity;
-import io.paradiddle.ms.entity.EntityConsumer;
+import io.paradiddle.ms.MimeType;
+import io.paradiddle.ms.RequestEntity;
+import io.paradiddle.ms.header.EntityHeaders;
 import java.io.IOException;
-import java.util.function.BiConsumer;
+import java.io.InputStream;
 
-public final class GenericResponse implements Response {
-    private final int _statusCode;
+public final class StandardRequestEntity implements RequestEntity {
     private final HeaderStore headers;
-    private final ResponseEntity entity;
+    private final InputStream stream;
 
-    public GenericResponse(
-        final int statusCode,
-        final HeaderStore headers,
-        final ResponseEntity entity
-    ) {
-        this._statusCode = statusCode;
+    public StandardRequestEntity(final HeaderStore headers, final InputStream stream) {
         this.headers = headers;
-        this.entity = entity;
+        this.stream = stream;
     }
 
     @Override
-    public int statusCode() {
-        return this._statusCode;
+    public long size() {
+        return Long.parseLong(
+            this.headers
+                .valueOf(EntityHeaders.CONTENT_LENGTH)
+                .orElse("-1")
+        );
     }
 
     @Override
-    public long contentLength() {
-        return this.entity.size();
+    public MimeType type() {
+        return null;
     }
 
     @Override
-    public void consumeHeaders(final BiConsumer<String, String> target) {
-        this.headers.consumeAll(target);
-    }
-
-    @Override
-    public void consumeEntity(
-        final EntityConsumer consumer
+    public <T> T interpreted(
+        final EntityInterpreter<T> interpreter
     ) throws IOException {
-        this.entity.consume(consumer);
+        try(this.stream) {
+            return interpreter.interpret(this.stream, this.headers);
+        }
     }
 }

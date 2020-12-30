@@ -16,14 +16,15 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-
 package io.paradiddle.ms;
 
-import java.io.InputStream;
+import io.paradiddle.ms.entity.EntityConsumer;
+import java.io.IOException;
+import java.util.function.BiConsumer;
 
 public interface Response {
     int statusCode();
-    HeaderStore headers();
-    int contentLength();
-    InputStream body();
+    long contentLength();
+    void consumeHeaders(BiConsumer<String, String> target);
+    void consumeEntity(EntityConsumer consumer) throws IOException;
 }

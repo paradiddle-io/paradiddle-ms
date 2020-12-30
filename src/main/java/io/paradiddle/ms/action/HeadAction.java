@@ -16,30 +16,23 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-
 package io.paradiddle.ms.action;
 
+import io.paradiddle.ms.Action;
 import io.paradiddle.ms.Request;
 import io.paradiddle.ms.Response;
-import io.paradiddle.ms.response.GenericResponse;
-import java.io.InputStream;
-import java.util.function.Function;
+import io.paradiddle.ms.response.HeadResponse;
+import java.io.IOException;
 
-public final class HeadAction implements Function<Request, Response> {
-    private final Function<Request, Response> getAction;
+public final class HeadAction implements Action {
+    private final Action getAction;
 
-    public HeadAction(final Function<Request, Response> getAction) {
+    public HeadAction(final Action getAction) {
         this.getAction = getAction;
     }
 
     @Override
-    public Response apply(final Request request) {
-        final var response = this.getAction.apply(request);
-        return new GenericResponse(
-            response.statusCode(),
-            response.headers(),
-            response.contentLength(),
-            InputStream.nullInputStream()
-        );
+    public Response act(final Request request) throws IOException {
+        return new HeadResponse(this.getAction.act(request));
     }
 }

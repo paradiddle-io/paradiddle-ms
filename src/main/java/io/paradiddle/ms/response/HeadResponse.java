@@ -16,50 +16,42 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-
 package io.paradiddle.ms.response;
 
-import io.paradiddle.ms.HeaderStore;
 import io.paradiddle.ms.Response;
-import io.paradiddle.ms.ResponseEntity;
 import io.paradiddle.ms.entity.EntityConsumer;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.function.BiConsumer;
 
-public final class GenericResponse implements Response {
-    private final int _statusCode;
-    private final HeaderStore headers;
-    private final ResponseEntity entity;
+public final class HeadResponse implements Response {
+    final Response get;
 
-    public GenericResponse(
-        final int statusCode,
-        final HeaderStore headers,
-        final ResponseEntity entity
-    ) {
-        this._statusCode = statusCode;
-        this.headers = headers;
-        this.entity = entity;
+    public HeadResponse(final Response get) {
+        this.get = get;
     }
 
     @Override
     public int statusCode() {
-        return this._statusCode;
+        return this.get.statusCode();
     }
 
     @Override
     public long contentLength() {
-        return this.entity.size();
+        return this.get.contentLength();
     }
 
     @Override
     public void consumeHeaders(final BiConsumer<String, String> target) {
-        this.headers.consumeAll(target);
+        this.get.consumeHeaders(target);
     }
 
     @Override
     public void consumeEntity(
         final EntityConsumer consumer
     ) throws IOException {
-        this.entity.consume(consumer);
+        this.get.consumeEntity(
+            (stream, headers) -> consumer.consume(InputStream.nullInputStream(), headers)
+        );
     }
 }

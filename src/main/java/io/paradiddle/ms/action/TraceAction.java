@@ -19,27 +19,23 @@
 
 package io.paradiddle.ms.action;
 
+import io.paradiddle.ms.Action;
+import io.paradiddle.ms.entity.response.TraceEntity;
 import io.paradiddle.ms.header.EntityHeaders;
 import io.paradiddle.ms.response.GenericResponse;
 import io.paradiddle.ms.Request;
 import io.paradiddle.ms.Response;
-import java.util.function.Function;
+import java.io.IOException;
 
-public final class TraceAction implements Function<Request, Response> {
+public final class TraceAction implements Action {
     @Override
-    public Response apply(final Request request) {
+    public Response act(final Request request) throws IOException {
         return new GenericResponse(
             200,
             request
                 .headers()
-                .minus(EntityHeaders.CONTENT_LENGTH),
-            Integer.parseInt(
-                request
-                    .headers()
-                    .valueOf(EntityHeaders.CONTENT_LENGTH)
-                    .orElse("-1")
-            ),
-            request.body()
+                .minus(EntityHeaders.all()),
+            new TraceEntity(request)
         );
     }
 }

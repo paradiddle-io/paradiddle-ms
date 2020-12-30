@@ -19,15 +19,15 @@
 
 package io.paradiddle.ms.action;
 
+import io.paradiddle.ms.Action;
 import io.paradiddle.ms.Request;
 import io.paradiddle.ms.RequestMethod;
 import io.paradiddle.ms.Response;
 import io.paradiddle.ms.response.OptionsResponse;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
-public final class OptionsAction implements Function<Request, Response> {
+public final class OptionsAction implements Action {
     private final Supplier<Set<RequestMethod>> allowed;
 
     public OptionsAction(final Supplier<Set<RequestMethod>> allowed) {
@@ -35,7 +35,7 @@ public final class OptionsAction implements Function<Request, Response> {
     }
 
     @Override
-    public Response apply(final Request request) {
+    public Response act(final Request request) {
         return new OptionsResponse(this.allowed.get());
     }
 }

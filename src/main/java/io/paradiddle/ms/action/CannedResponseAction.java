@@ -19,12 +19,13 @@
 
 package io.paradiddle.ms.action;
 
+import io.paradiddle.ms.Action;
 import io.paradiddle.ms.Request;
 import io.paradiddle.ms.Response;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public final class CannedResponseAction implements Function<Request, Response> {
+public final class CannedResponseAction implements Action {
     private final Supplier<Response> responses;
 
     public CannedResponseAction(final Supplier<Response> responses) {
@@ -32,7 +33,7 @@ public final class CannedResponseAction implements Function<Request, Response> {
     }
 
     @Override
-    public Response apply(final Request request) {
+    public Response act(final Request request) {
         return this.responses.get();
     }
 }

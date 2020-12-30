@@ -16,50 +16,40 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-
-package io.paradiddle.ms.response;
+package io.paradiddle.ms.entity.response;
 
 import io.paradiddle.ms.HeaderStore;
-import io.paradiddle.ms.Response;
+import io.paradiddle.ms.MimeType;
+import io.paradiddle.ms.Request;
 import io.paradiddle.ms.ResponseEntity;
+import io.paradiddle.ms.StandardMimeTypes;
 import io.paradiddle.ms.entity.EntityConsumer;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.function.BiConsumer;
+import java.nio.charset.StandardCharsets;
 
-public final class GenericResponse implements Response {
-    private final int _statusCode;
-    private final HeaderStore headers;
-    private final ResponseEntity entity;
+public final class TraceEntity implements ResponseEntity {
+    private final Request request;
 
-    public GenericResponse(
-        final int statusCode,
-        final HeaderStore headers,
-        final ResponseEntity entity
-    ) {
-        this._statusCode = statusCode;
-        this.headers = headers;
-        this.entity = entity;
+    public TraceEntity(final Request request) {
+        this.request = request;
     }
 
     @Override
-    public int statusCode() {
-        return this._statusCode;
+    public long size() {
+        return this.request.toString().length();
     }
 
     @Override
-    public long contentLength() {
-        return this.entity.size();
+    public MimeType type() {
+        return StandardMimeTypes.MESSAGE_HTTP;
     }
 
     @Override
-    public void consumeHeaders(final BiConsumer<String, String> target) {
-        this.headers.consumeAll(target);
-    }
-
-    @Override
-    public void consumeEntity(
-        final EntityConsumer consumer
-    ) throws IOException {
-        this.entity.consume(consumer);
+    public void consume(final EntityConsumer consumer) throws IOException {
+        consumer.consume(
+            new ByteArrayInputStream(this.request.toString().getBytes(StandardCharsets.UTF_8)),
+            new HeaderStore.Empty()
+        );
     }
 }

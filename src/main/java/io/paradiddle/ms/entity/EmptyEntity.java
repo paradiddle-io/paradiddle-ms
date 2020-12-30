@@ -16,50 +16,41 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-
-package io.paradiddle.ms.response;
+package io.paradiddle.ms.entity;
 
 import io.paradiddle.ms.HeaderStore;
-import io.paradiddle.ms.Response;
+import io.paradiddle.ms.MimeType;
+import io.paradiddle.ms.RequestEntity;
 import io.paradiddle.ms.ResponseEntity;
-import io.paradiddle.ms.entity.EntityConsumer;
 import java.io.IOException;
-import java.util.function.BiConsumer;
+import java.io.InputStream;
 
-public final class GenericResponse implements Response {
-    private final int _statusCode;
+public final class EmptyEntity implements RequestEntity, ResponseEntity {
+    private final InputStream stream;
     private final HeaderStore headers;
-    private final ResponseEntity entity;
 
-    public GenericResponse(
-        final int statusCode,
-        final HeaderStore headers,
-        final ResponseEntity entity
-    ) {
-        this._statusCode = statusCode;
-        this.headers = headers;
-        this.entity = entity;
+    public EmptyEntity() {
+        this.stream = InputStream.nullInputStream();
+        this.headers = new HeaderStore.Empty();
     }
 
     @Override
-    public int statusCode() {
-        return this._statusCode;
+    public long size() {
+        return 0;
     }
 
     @Override
-    public long contentLength() {
-        return this.entity.size();
+    public MimeType type() {
+        return string -> false;
     }
 
     @Override
-    public void consumeHeaders(final BiConsumer<String, String> target) {
-        this.headers.consumeAll(target);
+    public <T> T interpreted(final EntityInterpreter<T> interpreter) throws IOException {
+        return interpreter.interpret(this.stream, this.headers);
     }
 
     @Override
-    public void consumeEntity(
-        final EntityConsumer consumer
-    ) throws IOException {
-        this.entity.consume(consumer);
+    public void consume(final EntityConsumer consumer) throws IOException {
+        consumer.consume(this.stream, this.headers);
     }
 }

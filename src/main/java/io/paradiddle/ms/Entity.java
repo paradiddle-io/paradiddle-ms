@@ -19,16 +19,7 @@
 
 package io.paradiddle.ms;
 
-import java.io.IOException;
-import java.util.function.Function;
-
-@FunctionalInterface
-public interface Endpoint {
-    Response process(Request request) throws IOException;
-
-    interface Builder {
-        Endpoint build();
-
-        Endpoint build(Function<Request, Response> defaultAction);
-    }
+public interface Entity {
+    long size();
+    MimeType type();
 }

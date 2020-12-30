@@ -21,26 +21,40 @@ package io.paradiddle.ms.response;
 
 import io.paradiddle.ms.HeaderStore;
 import io.paradiddle.ms.Response;
-import java.io.InputStream;
+import io.paradiddle.ms.entity.EntityConsumer;
+import java.io.IOException;
+import java.util.function.BiConsumer;
 
 public final class NoContentResponse implements Response {
+    private final HeaderStore store;
+
+    public NoContentResponse() {
+        this(new HeaderStore.Empty());
+    }
+
+    public NoContentResponse(final HeaderStore store) {
+        this.store = store;
+    }
+
     @Override
     public int statusCode() {
         return 204;
     }
 
     @Override
-    public HeaderStore headers() {
-        return new HeaderStore.Empty();
+    public long contentLength() {
+        return 0;
     }
 
     @Override
-    public int contentLength() {
-        return -1;
+    public void consumeHeaders(final BiConsumer<String, String> target) {
+        this.store.consumeAll(target);
     }
 
     @Override
-    public InputStream body() {
-        return InputStream.nullInputStream();
+    public void consumeEntity(
+        final EntityConsumer consumer
+    ) throws IOException {
+        // Intentionally blank
     }
 }

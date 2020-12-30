@@ -16,19 +16,8 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-
 package io.paradiddle.ms;
 
-import java.io.IOException;
-import java.util.function.Function;
-
-@FunctionalInterface
-public interface Endpoint {
-    Response process(Request request) throws IOException;
-
-    interface Builder {
-        Endpoint build();
-
-        Endpoint build(Function<Request, Response> defaultAction);
-    }
+public interface MimeType {
+    boolean matches(String value);
 }

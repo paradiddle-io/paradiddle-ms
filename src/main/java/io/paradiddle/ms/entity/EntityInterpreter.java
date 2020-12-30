@@ -16,19 +16,12 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
+package io.paradiddle.ms.entity;
 
-package io.paradiddle.ms;
-
+import io.paradiddle.ms.HeaderStore;
 import java.io.IOException;
-import java.util.function.Function;
+import java.io.InputStream;
 
-@FunctionalInterface
-public interface Endpoint {
-    Response process(Request request) throws IOException;
-
-    interface Builder {
-        Endpoint build();
-
-        Endpoint build(Function<Request, Response> defaultAction);
-    }
+public interface EntityInterpreter<T> {
+    T interpret(InputStream stream, HeaderStore store) throws IOException;
 }

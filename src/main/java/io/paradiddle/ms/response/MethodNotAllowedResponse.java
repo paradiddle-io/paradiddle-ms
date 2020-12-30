@@ -19,13 +19,14 @@
 
 package io.paradiddle.ms.response;
 
-import io.paradiddle.ms.HeaderStore;
-import io.paradiddle.ms.header.general.AllowHeader;
+import io.paradiddle.ms.Header;
 import io.paradiddle.ms.RequestMethod;
 import io.paradiddle.ms.Response;
-import io.paradiddle.ms.header.store.SetBackedHeaderStore;
-import java.io.InputStream;
+import io.paradiddle.ms.entity.EntityConsumer;
+import io.paradiddle.ms.header.general.AllowHeader;
+import java.io.IOException;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 public final class MethodNotAllowedResponse implements Response {
@@ -41,19 +42,20 @@ public final class MethodNotAllowedResponse implements Response {
     }
 
     @Override
-    public HeaderStore headers() {
-        return new SetBackedHeaderStore(
-            Set.of(new AllowHeader(this.allowed.get()))
-        );
-    }
-
-    @Override
-    public int contentLength() {
+    public long contentLength() {
         return 0;
     }
 
     @Override
-    public InputStream body() {
-        return InputStream.nullInputStream();
+    public void consumeHeaders(final BiConsumer<String, String> target) {
+        final Header allowHeader = new AllowHeader(allowed.get());
+        target.accept(allowHeader.name(), allowHeader.value());
+    }
+
+    @Override
+    public void consumeEntity(
+        final EntityConsumer consumer
+    ) throws IOException {
+        // Intentionally blank
     }
 }

@@ -16,14 +16,15 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-
 package io.paradiddle.ms.httpserver;
 
 import com.sun.net.httpserver.HttpExchange;
+import io.paradiddle.ms.Header;
 import io.paradiddle.ms.HeaderStore;
 import io.paradiddle.ms.Request;
+import io.paradiddle.ms.RequestEntity;
 import io.paradiddle.ms.RequestMethod;
-import java.io.InputStream;
+import io.paradiddle.ms.entity.StandardRequestEntity;
 
 public final class HttpExchangeRequest implements Request {
     private final HttpExchange exchange;
@@ -48,7 +49,30 @@ public final class HttpExchangeRequest implements Request {
     }
 
     @Override
-    public InputStream body() {
-        return this.exchange.getRequestBody();
+    public RequestEntity entity() {
+        return new StandardRequestEntity(this.headers(), this.exchange.getRequestBody());
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append(
+            String.format(
+                "%s %s %s\n",
+                this.method(),
+                this.path(),
+                this.exchange.getProtocol()
+            )
+        );
+        for (final Header header : this.headers()) {
+            builder.append(
+                String.format(
+                    "%s: %s\n",
+                    header.name(),
+                    header.value()
+                )
+            );
+        }
+        return builder.toString();
     }
 }

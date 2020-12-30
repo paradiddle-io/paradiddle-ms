@@ -16,17 +16,11 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-
 package io.paradiddle.ms;
-
-import java.io.InputStream;
 
 public interface Request {
     RequestMethod method();
-
     String path();
-
     HeaderStore headers();
-
-    InputStream body();
+    RequestEntity entity();
 }
