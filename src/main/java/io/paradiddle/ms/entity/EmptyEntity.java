@@ -47,7 +47,7 @@ public final class EmptyEntity implements RequestEntity, ResponseEntity {
     }
 
     @Override
-    public <T> T interpreted(final EntityInterpreter<T> interpreter) throws IOException {
+    public <T> T interpreted(final EntityDecoder<T> interpreter) throws IOException {
         return interpreter.interpret(this.stream, this.headers);
     }
 

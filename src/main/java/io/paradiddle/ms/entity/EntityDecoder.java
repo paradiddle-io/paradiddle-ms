@@ -22,6 +22,6 @@ import io.paradiddle.ms.HeaderStore;
 import java.io.IOException;
 import java.io.InputStream;
 
-public interface EntityInterpreter<T> {
+public interface EntityDecoder<T> {
     T interpret(InputStream stream, HeaderStore store) throws IOException;
 }

@@ -50,7 +50,7 @@ public final class StandardRequestEntity implements RequestEntity {
 
     @Override
     public <T> T interpreted(
-        final EntityInterpreter<T> interpreter
+        final EntityDecoder<T> interpreter
     ) throws IOException {
         try(this.stream) {
             return interpreter.interpret(this.stream, this.headers);

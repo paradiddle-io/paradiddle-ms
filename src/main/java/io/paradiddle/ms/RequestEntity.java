@@ -18,9 +18,9 @@
  */
 package io.paradiddle.ms;
 
-import io.paradiddle.ms.entity.EntityInterpreter;
+import io.paradiddle.ms.entity.EntityDecoder;
 import java.io.IOException;
 
 public interface RequestEntity extends Entity {
-    <T> T interpreted(EntityInterpreter<T> interpreter) throws IOException;
+    <T> T interpreted(EntityDecoder<T> interpreter) throws IOException;
 }
