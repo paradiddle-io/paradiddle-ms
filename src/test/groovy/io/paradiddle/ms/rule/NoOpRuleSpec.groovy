@@ -1,6 +1,6 @@
 /*
  * Paradiddle MS - A lightweight microservices library with a comprehensible codebase.
- * Copyright (c) Michael Juliano 2020.
+ * Copyright (c) Michael Juliano 2021.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License version 2 as published by the Free Software Foundation.
@@ -16,17 +16,22 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-package io.paradiddle.ms.rule;
+package io.paradiddle.ms.rule
 
-import io.paradiddle.ms.Rule;
+import spock.lang.Specification
 
-/**
- * Performs no validation of an input simply returning it unchanged.
- * @param <T> The type of input.
- */
-public final class NoOpRule<T> implements Rule<T> {
-    @Override
-    public T evaluate(final T request) {
-        return request;
+class NoOpRuleSpec extends Specification {
+    def 'outputs are identical to inputs'() {
+        given: 'a NoOpRule'
+        def rule = new NoOpRule()
+
+        and: 'a sample input'
+        def input = 42
+
+        when: 'the input is evaluated against the rule'
+        def output = rule.evaluate(input)
+
+        then: 'the output is identicial to the input'
+        output.is(input)
     }
 }

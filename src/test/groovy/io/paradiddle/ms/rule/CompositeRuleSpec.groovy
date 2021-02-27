@@ -16,7 +16,6 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-
 package io.paradiddle.ms.rule
 
 import io.paradiddle.ms.Rule
@@ -39,7 +38,7 @@ class CompositeRuleSpec extends Specification {
     }
 
     def 'one rule is applied'() {
-        given: 'a CompositRule with one rule'
+        given: 'a CompositeRule with one rule'
         def mutated = 'rule applied'
         def rule = new CompositeRule(List.of({ mutated } as Rule<String>))
 
@@ -79,7 +78,7 @@ class CompositeRuleSpec extends Specification {
     }
 
     def 'a rule that throws an exception halts rule evaluation'() {
-        given: 'a CompositRule with three rules'
+        given: 'a CompositeRule with three rules'
         def rule = new CompositeRule(
             List.of(
                 { it + 2 } as Rule<Integer>,

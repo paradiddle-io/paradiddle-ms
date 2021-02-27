@@ -16,10 +16,19 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-
 package io.paradiddle.ms;
 
+/**
+ * A {@link Rule} validates an input value optionally transforming it.
+ * @param <T> The type of the input value.
+ */
 @FunctionalInterface
 public interface Rule<T> {
+    /**
+     * Evaluates the input against the rule.
+     * @param request The input
+     * @return The optionally transformed input
+     * @throws RuleViolation If the input did not satisfy this {@link Rule}
+     */
     T evaluate(T request) throws RuleViolation;
 }

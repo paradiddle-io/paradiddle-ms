@@ -16,15 +16,30 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-
 package io.paradiddle.ms.rule;
 
 import io.paradiddle.ms.Rule;
 import io.paradiddle.ms.RuleViolation;
+import java.util.List;
+import java.util.Set;
 
+/**
+ * Evaluates inputs against an {@link Iterable} of {@link Rule}s.
+ * @param <T> The type of the inputs.
+ */
 public final class CompositeRule<T> implements Rule<T> {
+    /**
+     * The {@link Rule}s.
+     */
     private final Iterable<Rule<T>> rules;
 
+    /**
+     * Constructs a {@link CompositeRule} from an {@link Iterable} of {@link Rule}s.
+     * The recommended approach is to construct your argument with
+     * {@link List#of(Object[])} if order is important or
+     * {@link Set#of(Object[])} if it is not.
+     * @param rules The {@link Rule}s.
+     */
     public CompositeRule(final Iterable<Rule<T>> rules) {
         this.rules = rules;
     }
