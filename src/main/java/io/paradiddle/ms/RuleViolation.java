@@ -16,22 +16,39 @@
  * 59 Temple Place, Suite 330
  * Boston, MA 02111-1307 USA
  */
-
 package io.paradiddle.ms;
 
 import io.paradiddle.ms.response.BadRequestResponse;
 
+/**
+ * Exception class that provides a {@link Response} that is used to reply to requesters.
+ */
 public class RuleViolation extends Exception {
+    /**
+     * The response to reply to requesters with.
+     */
     private final Response _response;
 
+    /**
+     * Constructs a {@link RuleViolation} with a default {@link Response} of
+     * {@link BadRequestResponse}.
+     */
     public RuleViolation() {
-        this._response = new BadRequestResponse();
+        this(new BadRequestResponse());
     }
 
+    /**
+     * Constructs a {@link RuleViolation} with the supplied {@link Response}.
+     * @param response The {@link Response}.
+     */
     public RuleViolation(final Response response) {
         this._response = response;
     }
 
+    /**
+     * Returns the {@link Response} for this {@link RuleViolation}.
+     * @return The {@link Response}.
+     */
     public Response response() {
         return this._response;
     }
