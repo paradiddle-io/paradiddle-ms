@@ -83,7 +83,7 @@ task codeCoverageReport(type: JacocoReport, group: 'reporting') {
     classDirectories.from = files(sourceSets.main.output)
 
     reports {
-        xml.enabled false
+        xml.enabled true
         csv.enabled false
         html.enabled true
     }
