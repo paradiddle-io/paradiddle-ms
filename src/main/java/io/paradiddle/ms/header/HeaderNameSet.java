@@ -31,24 +31,12 @@ public final class HeaderNameSet extends SetDelegate<HeaderName> implements Head
 
     @Override
     public boolean containsMatch(final Header header) {
-        final Iterator<HeaderName> headers = this.iterator();
-        boolean result = false;
-        while (headers.hasNext() && !result) {
-            final HeaderName name = headers.next();
-            result = name.matches(header);
-        }
-        return result;
+        return this.stream().anyMatch(name -> name.matches(header));
     }
 
     @Override
     public boolean containsMatch(final Map.Entry<String, String> header) {
-        final Iterator<HeaderName> headers = this.iterator();
-        boolean result = false;
-        while (headers.hasNext() && !result) {
-            final HeaderName name = headers.next();
-            result = name.matches(header);
-        }
-        return result;
+        return this.stream().anyMatch(name -> name.matches(header));
     }
 
     @Override
