@@ -1,5 +1,8 @@
 # Paradiddle MS
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/35045923dd5491d0b048/maintainability)](https://codeclimate.com/github/paradiddle-io/paradiddle-ms/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/35045923dd5491d0b048/test_coverage)](https://codeclimate.com/github/paradiddle-io/paradiddle-ms/test_coverage)
+
 Paradiddle MS is a lightweight, 0-dependency microservices framework with a comprehensible codebase.
 This project is loosely inspired by msf4j, but like so many Java projects, the codebase for msf4j
 is impenetrably complex. The overriding goal of this project is to have a codebase that is easy to
