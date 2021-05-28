@@ -20,7 +20,6 @@ package io.paradiddle.ms.header;
 
 import io.paradiddle.ms.Header;
 import io.paradiddle.ms.util.SetDelegate;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
