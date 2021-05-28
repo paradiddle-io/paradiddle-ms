@@ -5,7 +5,7 @@ plugins {
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 testSets {
@@ -49,6 +49,11 @@ jacocoTestCoverageVerification {
                 value = 'COVEREDRATIO'
                 minimum = 1.000
             }
+
+            excludes = [
+                // Class only delegates so won't benefit from test coverage
+                'io.paradiddle.ms.util.SetDelegate'
+            ]
         }
 
         rule {
@@ -71,6 +76,27 @@ jacocoTestCoverageVerification {
                 value = 'COVEREDRATIO'
                 minimum = 1.000
             }
+
+            excludes = [
+                // Methods of class that only delegates
+                'io.paradiddle.ms.util.SetDelegate.SetDelegate(java.util.Set)',
+                'io.paradiddle.ms.util.SetDelegate.size()',
+                'io.paradiddle.ms.util.SetDelegate.isEmpty()',
+                'io.paradiddle.ms.util.SetDelegate.contains(java.lang.Object)',
+                'io.paradiddle.ms.util.SetDelegate.iterator()',
+                'io.paradiddle.ms.util.SetDelegate.toArray()',
+                'io.paradiddle.ms.util.SetDelegate.toArray(java.lang.Object[])',
+                'io.paradiddle.ms.util.SetDelegate.add(java.lang.Object)',
+                'io.paradiddle.ms.util.SetDelegate.remove(java.lang.Object)',
+                'io.paradiddle.ms.util.SetDelegate.containsAll(java.util.Collection)',
+                'io.paradiddle.ms.util.SetDelegate.addAll(java.util.Collection)',
+                'io.paradiddle.ms.util.SetDelegate.retainAll(java.util.Collection)',
+                'io.paradiddle.ms.util.SetDelegate.removeAll(java.util.Collection)',
+                'io.paradiddle.ms.util.SetDelegate.clear()',
+                'io.paradiddle.ms.util.SetDelegate.equals(java.lang.Object)',
+                'io.paradiddle.ms.util.SetDelegate.hashCode()',
+                'io.paradiddle.ms.util.SetDelegate.spliterator()'
+            ]
         }
     }
 }
