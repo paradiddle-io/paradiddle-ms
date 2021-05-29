@@ -1,6 +1,6 @@
 /*
  * Paradiddle MS - A lightweight microservices library with a comprehensible codebase.
- * Copyright (c) Michael Juliano 2020.
+ * Copyright (c) Michael Juliano 2020-2021.
  *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License version 2 as published by the Free Software Foundation.
@@ -19,10 +19,10 @@
 package io.paradiddle.ms.response;
 
 import io.paradiddle.ms.Header;
-import io.paradiddle.ms.entity.EntityConsumer;
-import io.paradiddle.ms.header.general.AllowHeader;
 import io.paradiddle.ms.RequestMethod;
 import io.paradiddle.ms.Response;
+import io.paradiddle.ms.entity.EntityConsumer;
+import io.paradiddle.ms.header.general.AllowHeader;
 import java.io.IOException;
 import java.util.Set;
 import java.util.function.BiConsumer;
