@@ -14,7 +14,7 @@ testSets {
 
 dependencies {
     testImplementation("org.codehaus.groovy:groovy-all:2.5.12")
-    testImplementation("org.spockframework:spock-core:1.3-groovy-2.5")
+    testImplementation("org.spockframework:spock-core:2.0-groovy-3.0")
     testImplementation("junit:junit:4.13.2")
 
     "integrationTestImplementation"("org.codehaus.groovy.modules.http-builder:http-builder:0.7.1")
