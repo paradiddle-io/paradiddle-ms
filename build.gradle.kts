@@ -13,14 +13,21 @@ testSets {
 }
 
 dependencies {
-    testImplementation("org.codehaus.groovy:groovy-all:2.5.12")
-    testImplementation("org.spockframework:spock-core:1.3-groovy-2.5")
-    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.spockframework:spock-core:2.0-groovy-3.0")
 
+    "integrationTestImplementation"("org.codehaus.groovy:groovy-all:3.0.8")
     "integrationTestImplementation"("org.codehaus.groovy.modules.http-builder:http-builder:0.7.1")
 }
 
 tasks {
+    named<Test>("test") {
+        useJUnitPlatform()
+    }
+
+    named<Test>("integrationTest") {
+        useJUnitPlatform()
+    }
+
     named<JacocoCoverageVerification>("jacocoTestCoverageVerification") {
         dependsOn("test", "integrationTest")
         executionData(
@@ -115,5 +122,3 @@ tasks {
         }
     }
 }
-
-
