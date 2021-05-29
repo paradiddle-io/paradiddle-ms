@@ -27,6 +27,7 @@ jobs:
         configuration-cache-enabled: true
     - name: Code Climate Coverage Report
       uses: paambaati/codeclimate-action@v2.7.5
+      continue-on-error: true
       env:
         CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
         JACOCO_SOURCE_PATH: ${{github.workspace}}/src/main/java
