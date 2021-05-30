@@ -21,4 +21,8 @@ package io.paradiddle.ms.httpserver;
 
 public final class HttpExchangeAttributes {
     public static final String REQUEST = "request";
+
+    private HttpExchangeAttributes() {
+        // Prevents instantiation.
+    }
 }
