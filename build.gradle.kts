@@ -38,6 +38,12 @@ dependencies {
     "integrationTestImplementation"("org.codehaus.groovy.modules.http-builder:http-builder:0.7.1")
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
 tasks {
     named<Test>("test") {
         useJUnitPlatform()
