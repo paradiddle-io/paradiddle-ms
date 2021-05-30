@@ -56,7 +56,7 @@ class DefaultGenericEndpointSpec extends Specification {
     }
 
     def 'GET ignores request bodies'() {
-
+        // TODO figure out how to send an invalid GET with a body
     }
 
     def 'HEAD replies with 204'() {
@@ -68,7 +68,7 @@ class DefaultGenericEndpointSpec extends Specification {
     }
 
     def 'HEAD ignores request bodies'() {
-
+        // TODO figure out how to send an invalid HEAD with a body
     }
 
     def 'POST replies with 405 and includes the Allow header'() {
