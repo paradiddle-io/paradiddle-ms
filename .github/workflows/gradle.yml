@@ -22,9 +22,6 @@ jobs:
       uses: eskatos/gradle-command-action@v2
       with:
         arguments: check codeCoverageReport
-        wrapper-cache-enabled: true
-        dependencies-cache-enabled: true
-        configuration-cache-enabled: true
     - name: Code Climate Coverage Report
       uses: paambaati/codeclimate-action@v2.7.5
       continue-on-error: true
