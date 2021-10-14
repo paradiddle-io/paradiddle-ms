@@ -24,6 +24,9 @@ import io.paradiddle.ms.Response;
 import io.paradiddle.ms.response.HeadResponse;
 import java.io.IOException;
 
+/**
+ * Wraps a GET {@link Action} and wraps its response in a {@link HeadResponse}.
+ */
 public final class HeadAction implements Action {
     private final Action getAction;
 

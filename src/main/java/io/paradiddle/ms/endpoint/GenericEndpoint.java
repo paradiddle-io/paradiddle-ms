@@ -154,9 +154,9 @@ public final class GenericEndpoint implements Endpoint {
 
         /**
          * Builds a {@link GenericEndpoint} which performs the specified {@link Action} for
-         * unspecified {@link RequestMethod}s
-         * @param defaultAction
-         * @return
+         * unspecified {@link RequestMethod}s.
+         * @param defaultAction the default {@link Action}
+         * @return a constructed {@link Endpoint}
          */
         public Endpoint build(final Action defaultAction) {
             this.actions.put(

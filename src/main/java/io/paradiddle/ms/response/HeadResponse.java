@@ -19,11 +19,17 @@
 package io.paradiddle.ms.response;
 
 import io.paradiddle.ms.Response;
+import io.paradiddle.ms.action.HeadAction;
 import io.paradiddle.ms.entity.EntityConsumer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.function.BiConsumer;
 
+/**
+ * Wraps a GET {@link Response} and swallows any response entity to conform to the official specification
+ * for the behavior of HEAD requests.
+ * @see HeadAction
+ */
 public final class HeadResponse implements Response {
     final Response get;
 

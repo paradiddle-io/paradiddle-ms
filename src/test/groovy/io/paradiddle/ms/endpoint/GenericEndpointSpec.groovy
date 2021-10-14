@@ -22,8 +22,8 @@ import io.paradiddle.ms.HeaderStore
 import io.paradiddle.ms.Request
 import io.paradiddle.ms.RequestEntity
 import io.paradiddle.ms.RequestMethod
-import io.paradiddle.ms.endpoint.GenericEndpoint
 import io.paradiddle.ms.entity.EmptyEntity
+import io.paradiddle.ms.response.HeadResponse
 import io.paradiddle.ms.response.NoContentResponse
 import spock.lang.Specification
 
@@ -39,15 +39,15 @@ class GenericEndpointSpec extends Specification {
         response instanceof NoContentResponse
     }
 
-    def 'HEAD returns a 204 by default'() {
+    def 'HEAD returns a HeadResponse by default'() {
         given: 'a GenericEndpoint built with default values'
         def endpoint = new GenericEndpoint.Builder().build()
 
         when: 'the endpoint is given a Request to process'
         def response = endpoint.process(new TestRequest(RequestMethod.HEAD))
 
-        then: 'the Response is a NoContentResponse'
-        response.statusCode() == 204
+        then: 'the Response is a HeadResponse'
+        response instanceof HeadResponse
     }
 
     class TestRequest implements Request {
