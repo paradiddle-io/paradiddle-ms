@@ -17,7 +17,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '17'
-        distribution: 'open'
+        distribution: 'adopt'
     - name: Gradle Check
       uses: eskatos/gradle-command-action@v2
       with:
