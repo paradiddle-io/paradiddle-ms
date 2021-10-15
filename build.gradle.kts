@@ -46,10 +46,6 @@ java {
 }
 
 tasks {
-    named<Test>("test") {
-        useJUnitPlatform()
-    }
-
     named<Test>("integrationTest") {
         useJUnitPlatform()
     }
@@ -141,19 +137,6 @@ tasks {
         }
     }
 
-    register<JacocoReport>("codeCoverageReport") {
-        group = "reporting"
-        dependsOn("test", "integrationTest")
-        executionData(files(withType<Test>()).filter { it.name.endsWith(".exec") })
-        sourceSets(sourceSets.main.get())
-
-        reports {
-            xml.required.set(true)
-            csv.required.set(false)
-            html.required.set(true)
-        }
-    }
-
     named<org.nosphere.apache.rat.RatTask>("rat") {
         substringMatcher(
             "GPL2",
@@ -169,5 +152,22 @@ tasks {
         excludes.add("gradlew")
         excludes.add("gradlew.bat")
         excludes.add("README.md")
+    }
+
+    named<Test>("test") {
+        useJUnitPlatform()
+    }
+
+    register<JacocoReport>("codeCoverageReport") {
+        group = "reporting"
+        dependsOn("test", "integrationTest")
+        executionData(files(withType<Test>()).filter { it.name.endsWith(".exec") })
+        sourceSets(sourceSets.main.get())
+
+        reports {
+            xml.required.set(true)
+            csv.required.set(false)
+            html.required.set(true)
+        }
     }
 }
