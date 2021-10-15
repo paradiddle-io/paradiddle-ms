@@ -19,6 +19,7 @@
 package io.paradiddle.ms;
 
 public enum StandardMimeTypes implements MimeType {
+    TEXT_PLAIN("text/plain"),
     MESSAGE_HTTP("message/http"),
     NONE("");
 

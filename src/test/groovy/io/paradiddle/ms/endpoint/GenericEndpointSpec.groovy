@@ -18,13 +18,10 @@
  */
 package io.paradiddle.ms.endpoint
 
-import io.paradiddle.ms.HeaderStore
-import io.paradiddle.ms.Request
-import io.paradiddle.ms.RequestEntity
 import io.paradiddle.ms.RequestMethod
-import io.paradiddle.ms.entity.EmptyEntity
 import io.paradiddle.ms.response.HeadResponse
 import io.paradiddle.ms.response.NoContentResponse
+import io.paradiddle.ms.test.TestRequest
 import spock.lang.Specification
 
 class GenericEndpointSpec extends Specification {
@@ -48,33 +45,5 @@ class GenericEndpointSpec extends Specification {
 
         then: 'the Response is a HeadResponse'
         response instanceof HeadResponse
-    }
-
-    class TestRequest implements Request {
-        private final RequestMethod _method
-
-        TestRequest(final RequestMethod method) {
-            this._method = method
-        }
-
-        @Override
-        RequestMethod method() {
-            return this._method
-        }
-
-        @Override
-        String path() {
-            return '/'
-        }
-
-        @Override
-        HeaderStore headers() {
-            return new HeaderStore.Empty()
-        }
-
-        @Override
-        RequestEntity entity() {
-            return new EmptyEntity()
-        }
     }
 }
