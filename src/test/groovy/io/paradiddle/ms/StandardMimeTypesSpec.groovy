@@ -23,7 +23,6 @@ import spock.lang.Specification
 
 class StandardMimeTypesSpec extends Specification {
     def 'should match with the right text'() {
-
         expect: 'the MIME type to match the text'
         mimeType.matches(text)
 

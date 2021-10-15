@@ -23,7 +23,7 @@ import io.paradiddle.ms.response.BadRequestResponse;
 /**
  * Exception class that provides a {@link Response} that is used to reply to requesters.
  */
-public class RuleViolation extends Exception {
+public final class RuleViolation extends Exception {
     /**
      * The response to reply to requesters with.
      */
