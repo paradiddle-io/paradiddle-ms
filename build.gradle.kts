@@ -21,6 +21,7 @@ plugins {
     groovy
     jacoco
     id("org.unbroken-dome.test-sets") version "4.0.0"
+    id("org.nosphere.apache.rat") version "0.7.0"
 }
 
 repositories {
@@ -147,9 +148,26 @@ tasks {
         sourceSets(sourceSets.main.get())
 
         reports {
-            xml.isEnabled = true
-            csv.isEnabled = false
-            html.isEnabled = true
+            xml.required.set(true)
+            csv.required.set(false)
+            html.required.set(true)
         }
+    }
+
+    named<org.nosphere.apache.rat.RatTask>("rat") {
+        substringMatcher(
+            "GPL2",
+            "GPL2",
+            "GNU General Public License version 2"
+        )
+        approvedLicense("GPL2")
+        excludes.add(".github/**")
+        excludes.add(".gitignore")
+        excludes.add(".idea/**")
+        excludes.add("build/**")
+        excludes.add("gradle/**")
+        excludes.add("gradlew")
+        excludes.add("gradlew.bat")
+        excludes.add("README.md")
     }
 }
