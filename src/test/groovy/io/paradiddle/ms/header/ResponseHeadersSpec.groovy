@@ -23,6 +23,14 @@ import io.paradiddle.ms.Header
 import spock.lang.Specification
 
 class ResponseHeadersSpec extends Specification {
+    def 'should provide all its header names for manipulating header stores'() {
+        expect: 'the collection to have 29 response headers'
+        ResponseHeaders.all()
+            .stream()
+            .filter({ it instanceof ResponseHeaders })
+            .count() == 29
+    }
+
     def 'should match with Headers with the right name'() {
         expect: 'a generic header with the right name irrespective of case to match the standard header'
         responseHeader.matches(new Header.Generic(name, ''))
@@ -33,6 +41,9 @@ class ResponseHeadersSpec extends Specification {
         responseHeader.matches(new AbstractMap.SimpleImmutableEntry<>(name, ''))
         responseHeader.matches(new AbstractMap.SimpleImmutableEntry<>(name.toUpperCase(), ''))
         responseHeader.matches(new AbstractMap.SimpleImmutableEntry<>(name.toLowerCase(), ''))
+
+        and: 'the response header\'s value is equal to the name'
+        responseHeader.value() == name
 
         where:
         name                               | responseHeader
