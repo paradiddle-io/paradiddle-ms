@@ -20,6 +20,7 @@
 package io.paradiddle.ms;
 
 import java.util.Map;
+import java.util.Objects;
 
 public interface Header {
     String name();
@@ -47,6 +48,23 @@ public interface Header {
         @Override
         public String value() {
             return this.value;
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            final Generic generic = (Generic) o;
+            return name.equals(generic.name) && Objects.equals(value, generic.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(name, value);
         }
     }
 }
