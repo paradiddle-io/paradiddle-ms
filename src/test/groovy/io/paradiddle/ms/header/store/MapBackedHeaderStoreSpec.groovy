@@ -80,4 +80,76 @@ class MapBackedHeaderStoreSpec extends Specification {
         then: 'the store returns an empty result'
         result.size() == 0
     }
+
+    def 'should provide the a list of Headers minus the provided one'() {
+        given: 'a store with some headers'
+        def headers = ['test1': 'test', 'test2': 'test']
+        def store = new MapBackedHeaderStore(headers)
+
+        when: 'the store is asked for to remove a header'
+        def result = store.minus(new HeaderName.Basic('test1'))
+
+        then: 'the resulting list should have all but the removed header'
+        !result.fetch(new HeaderName.Basic('test1')).isPresent()
+        result.fetch(new HeaderName.Basic('test2')).isPresent()
+    }
+
+    def 'should provide the a list of Headers minus the provided ones'() {
+        given: 'a store with some headers'
+        def headers = ['test1': 'test', 'test2': 'test', 'test3': 'test']
+        def store = new MapBackedHeaderStore(headers)
+
+        when: 'the store is asked for to remove some headers'
+        def namesToRemove = new HeaderNameSet(
+            new HeaderName.Basic('test1'),
+            new HeaderName.Basic('test2')
+        )
+        def result = store.minus(namesToRemove)
+
+        then: 'the resulting list should have all but the removed header'
+        !result.fetch(new HeaderName.Basic('test1')).isPresent()
+        !result.fetch(new HeaderName.Basic('test2')).isPresent()
+        result.fetch(new HeaderName.Basic('test3')).isPresent()
+    }
+
+    def 'should provide the correct value'() {
+        given: 'a store with some headers'
+        def headers = ['test1': 'thing1', 'test2': 'thing2']
+        def store = new MapBackedHeaderStore(headers)
+
+        when: 'the store is asked for a value'
+        def result = store.valueOf(new HeaderName.Basic('test2'))
+
+        then: 'the returned value matches that of the header'
+        result.get() == 'thing2'
+    }
+
+    def 'should be able to iterate the headers'() {
+        given: 'a store with some headers'
+        def headers = ['test1': 'test', 'test2': 'test']
+        def store = new MapBackedHeaderStore(headers)
+
+        expect: 'iterating through the store yields the correct result'
+        store.size() == headers.size()
+        for (header in store) {
+            headers[header.name()] == header.value()
+        }
+    }
+
+    def 'should consume all headers'() {
+        given: 'a store with some headers'
+        def headers = ['test1': 'test', 'test2': 'test']
+        def store = new MapBackedHeaderStore(headers)
+
+        when: 'the headers are consumed'
+        Map<String, String> result = [:]
+        store.consumeAll({
+            name, value ->
+            result.put(name, value)
+        })
+
+        then: 'all the headers are iterated'
+        headers.entrySet().containsAll(result.entrySet())
+        result.entrySet().containsAll(headers.entrySet())
+    }
 }
