@@ -33,7 +33,7 @@ testSets {
 }
 
 dependencies {
-    testImplementation("org.spockframework:spock-core:2.0-groovy-3.0")
+    testImplementation("org.spockframework:spock-core:2.1-groovy-3.0")
 
     "integrationTestImplementation"("org.codehaus.groovy:groovy-all:3.0.9")
     "integrationTestImplementation"("org.codehaus.groovy.modules.http-builder:http-builder:0.7.1")
