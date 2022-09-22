@@ -21,7 +21,7 @@ plugins {
     groovy
     jacoco
     id("org.unbroken-dome.test-sets") version "4.0.0"
-    id("org.nosphere.apache.rat") version "0.7.0"
+    id("org.nosphere.apache.rat") version "0.8.0"
 }
 
 repositories {
