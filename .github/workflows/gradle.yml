@@ -23,7 +23,7 @@ jobs:
       with:
         arguments: check codeCoverageReport
     - name: Code Climate Coverage Report
-      uses: paambaati/codeclimate-action@v3.0.0
+      uses: paambaati/codeclimate-action@v3.1.1
       continue-on-error: true
       env:
         CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
